@@ -1,4 +1,4 @@
-def hola
+# def hola
 
 def main():
 
@@ -15,9 +15,9 @@ def main():
 
             match opcion:
                 case 1:
-                    submenu_listas(lista)
-                case 2:
-                      
+                    # submenu_listas(lista)
+                #case 2:
+                      1
                 case 0:
                     print("\n*Usted salio del programa*")
                     break
