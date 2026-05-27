@@ -17,13 +17,11 @@
 # • Estado del pago (cobrado, pendiente, en cuotas).
 
 
+import json
 from datetime import date
 
+from utils.dbUtils import _db_inyectar_datos, _db_leer_datos
 from utils.validateUtils import _input_int
-
-# TODO:
-# Mejorar la persistencia de datos con "Semana 9: Archivos"
-VENTAS = []
 
 
 # Registrar una venta nueva
@@ -49,21 +47,22 @@ def registrar_venta():
 
         match opcion:
             case 1:
+                # TODO:
+                # TRAER DATOS DE OTROS MODULOS:
+                # Buscar en el modulo de Autos
+                # Buscar en el modulo de Clientes
+                # Buscar en el modulo de Vendedor
                 nueva_venta = {
-                    # TODO:
-                    # TRAER DATOS DE OTROS MODULOS:
-                    # Buscar en el modulo de Autos
-                    # Buscar en el modulo de Clientes
-                    # Buscar en el modulo de Vendedor
-                    "fecha_venta": date.today(),
+                    "fecha_venta": str(date.today()),
                     "precio_final": int(input("Agregue el precio final: ")),
                     "forma_pago": input("Agregue la forma de pago: "),
                     "estado_pago": input("Agregue el estado del pago: "),
                 }
+                _db_inyectar_datos("db/db_ventas.json", nueva_venta)
 
-                VENTAS.append(nueva_venta)
             case 2:
-                print(VENTAS)
+                lectura = _db_leer_datos("db/db_ventas.json")
+                print(json.dumps(lectura, indent=4))
             case 0:
                 print("Volviendo...")
             case _:
