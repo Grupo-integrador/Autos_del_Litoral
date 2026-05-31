@@ -10,9 +10,9 @@ def registrar_nueva_reserva(lista_reservas):
     print("--- NUEVA RESERVA ---")
 
     numero_unico = ingresar_entero("Ingresar numero_unico: ")
-    auto = input("Ingresar auto: ")
-    cliente = input("Ingresar cliente: ")
-    vendedor = input("Ingresar vendedor: ")
+    auto = input("Ingresar auto: ").lower()
+    cliente = input("Ingresar cliente: ").lower()
+    vendedor = input("Ingresar vendedor: ").lower()
     monto_reserva = ingresar_float("Ingresar monto_reserva: ")
     
     
@@ -44,37 +44,141 @@ def registrar_nueva_reserva(lista_reservas):
     print(f"¡Reserva guardada! Vence el: {fecha_limite_texto}")
 
 def listar_reservas_activas(lista_reservas):
-    for reserva in lista_reservas:
-        if reserva["estado"] == ESTADO_RESERVA_ACTIVA:
-            print(reserva)
-def buscar_reservas():
-    pass
-def concretar_venta():
-    pass
-def cancelar_reserva():
-    pass
+    if len(lista_reservas) == 0:
+        print("No hay reservas registradas")
+        return
 
-def ingresar_entero(msj:str)->int:
+    for nueva_reserva in lista_reservas:
+        if nueva_reserva["estado"] == ESTADO_RESERVA_ACTIVA:
+            print("-" * 20)
+            print(f"ID: {nueva_reserva['id_key']}")
+            print(f"Número único: {nueva_reserva['numero_unico']}")
+            print(f"Auto: {nueva_reserva['auto']}")
+            print(f"Cliente: {nueva_reserva['cliente']}")
+            print(f"Vendedor: {nueva_reserva['vendedor']}")
+            print(f"Monto reserva: ${nueva_reserva['monto_reserva']}")
+            print(f"Fecha reserva: {nueva_reserva['fecha_reserva']}")
+            print(f"Fecha límite: {nueva_reserva['fecha_limite']}")
+            print(f"Estado: {nueva_reserva['estado']}")
+            print("-" * 20)
+        else:
+            print("No hay reservas activas")
+
+def buscar_reservas(lista_reservas):
+
+    print("1. Buscar por auto")
+    print("2. Buscar por cliente")
+    print("3. Buscar por vendedor")
+
+    opcion = ingresar_entero("Opcion: ")
+
+    match opcion:
+        case 1:
+            auto = input("Ingrese auto: ")
+            for nueva_reserva in lista_reservas:
+                if nueva_reserva["auto"].lower() == auto.lower():
+                    print(nueva_reserva)
+                    return
+            print("No se encontró una reserva para el auto especificado.")
+            return
+        case 2:
+            cliente = input("Ingrese cliente: ").lower()
+            for nueva_reserva in lista_reservas:
+                if nueva_reserva["cliente"].lower() == cliente.lower():
+                    print(nueva_reserva)
+                    return
+            print("No se encontró una reserva para el cliente especificado.")
+            return
+
+        case 3:
+            vendedor = input("Ingrese vendedor: ").lower()
+            for nueva_reserva in lista_reservas:
+                if nueva_reserva["vendedor"].lower() == vendedor.lower():
+                    print(nueva_reserva)
+                    return
+            print("No se encontró una reserva para el vendedor especificado.")
+            return
+
+def concretar_venta(lista_reservas):
+    print("1. Concretar venta por auto")
+    print("2. Concretar venta por cliente")
+    print("3. Concretar venta por vendedor")
+
+    opcion = ingresar_entero("Opcion: ")
+
+    match opcion:
+        case 1:
+            auto = input("Ingrese auto: ")
+            for nueva_reserva in lista_reservas:
+                if nueva_reserva["auto"].lower() == auto.lower():
+                    nueva_reserva["monto_reserva"] += ingresar_float("Ingresar monto a saldar: ")
+                    nueva_reserva["estado"] = ESTADO_RESERVA_VENTA
+                    print("¡Venta concretada y monto actualizado exitosamente!")
+
+        case 2:
+            cliente = input("Ingrese cliente: ").lower()
+            for nueva_reserva in lista_reservas:
+                if nueva_reserva["cliente"].lower() == cliente.lower():
+                    nueva_reserva["monto_reserva"] += ingresar_float("Ingresar monto a saldar: ")
+                    nueva_reserva["estado"] = ESTADO_RESERVA_VENTA
+                    print("¡Venta concretada y monto actualizado exitosamente!")
+
+        case 3:
+            vendedor = input("Ingrese vendedor: ").lower()
+            for nueva_reserva in lista_reservas:
+                if nueva_reserva["vendedor"].lower() == vendedor.lower():
+                    nueva_reserva["monto_reserva"] += ingresar_float("Ingresar monto a saldar: ")
+                    nueva_reserva["estado"] = ESTADO_RESERVA_VENTA
+                    print("¡Venta concretada y monto actualizado exitosamente!")
+
+
+def cancelar_reserva(lista_reservas):
+    print("1. Cancelar venta por auto")
+    print("2. Cancelar venta por cliente")
+    print("3. Cancelar venta por vendedor")
+
+    opcion = ingresar_entero("Opcion: ")
+
+    match opcion:
+        case 1:
+            auto = input("Ingrese auto: ")
+            for nueva_reserva in lista_reservas:
+                if nueva_reserva["auto"].lower() == auto.lower():
+                    nueva_reserva["estado"] = ESTADO_RESERVA_CANCELADA
+                    print("¡Reserva cancelada exitosamente!")
+        case 2:
+            cliente = input("Ingrese cliente: ").lower()
+            for nueva_reserva in lista_reservas:
+                if nueva_reserva["cliente"].lower() == cliente.lower():
+                    nueva_reserva["estado"] = ESTADO_RESERVA_CANCELADA
+                    print("¡Reserva cancelada exitosamente!")
+
+        case 3:
+            vendedor = input("Ingrese vendedor: ").lower()
+            for nueva_reserva in lista_reservas:
+                if nueva_reserva["vendedor"].lower() == vendedor.lower():
+                    nueva_reserva["estado"] = ESTADO_RESERVA_CANCELADA
+                    print("¡Reserva cancelada exitosamente!")
+
+def ingresar_entero(msj: str) -> int:
     a_retornar = input(msj)
-    while not a_retornar.isnumeric:
+
+    while not a_retornar.isnumeric():
         print("El valor ingresado no es numerico!")
         a_retornar = input(msj)
+
     return int(a_retornar)
 
-def ingresar_float(msj:str)->float:
-    a_retornar = input(msj)
-    while not a_retornar.isnumeric:
-        print("El valor ingresado no es numerico!")
-        a_retornar = input(msj)
-    return float(a_retornar)
-
-def listar():
-    for lista_reserva in lista_reserva:
-        print(lista_reserva)
+def ingresar_float(msj: str) -> float:
+    while True:
+        try:
+            return float(input(msj))
+        except ValueError:
+            print("El valor ingresado no es un número válido.")
 
 def main_reservas():
         # lista
-        lista_reservas = [{}]
+        lista_reservas = []
 
         opcion = -1
 
@@ -94,13 +198,13 @@ def main_reservas():
                 case 1:
                       registrar_nueva_reserva(lista_reservas) #parametro
                 case 2:
-                      listar_reservas_activas()
+                      listar_reservas_activas(lista_reservas)
                 case 3:
-                      buscar_reservas()
+                      buscar_reservas(lista_reservas)
                 case 4:
-                      concretar_venta()  
+                      concretar_venta(lista_reservas)  
                 case 5:
-                      cancelar_reserva()
+                      cancelar_reserva(lista_reservas)
                     
                 case 0:
                     print("\n*Usted salio del programa*")
