@@ -9,7 +9,7 @@ ESTADO_RESERVA_CANCELADA = "cancelada"
 def registrar_nueva_reserva(lista_reservas):
     print("--- NUEVA RESERVA ---")
 
-    numero_unico = _input_int("Ingresar numero_unico: ")
+    numero_unico = _input_int("Ingresar numero unico: ")
     auto = input("Ingresar auto: ").lower()
     cliente = input("Ingresar cliente: ").lower()
     vendedor = input("Ingresar vendedor: ").lower()
