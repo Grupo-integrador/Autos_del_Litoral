@@ -1,4 +1,3 @@
-from datetime import datetime
 from datetime import datetime, timedelta
 
 ESTADO_RESERVA_ACTIVA='activa'
@@ -9,11 +8,11 @@ ESTADO_RESERVA_CANCELADA='cancelada'
 def registrar_nueva_reserva(lista_reservas):
     print("--- NUEVA RESERVA ---")
 
-    numero_unico = ingresar_entero("Ingresar numero_unico: ")
+    numero_unico = _input_int("Ingresar numero_unico: ")
     auto = input("Ingresar auto: ").lower()
     cliente = input("Ingresar cliente: ").lower()
     vendedor = input("Ingresar vendedor: ").lower()
-    monto_reserva = ingresar_float("Ingresar monto_reserva: ")
+    monto_reserva = _input_int("Ingresar monto_reserva: ")
     
     
     momento_actual = datetime.now()
@@ -42,6 +41,23 @@ def registrar_nueva_reserva(lista_reservas):
     
     lista_reservas.append(nueva_reserva)
     print(f"¡Reserva guardada! Vence el: {fecha_limite_texto}")
+
+#funcion para verificar y actualizar reservas vencidas
+def verificar_y_actualizar_vencimientos(lista_reservas):
+    fecha_actual = datetime.now()
+    cantidad_canceladas = 0
+    for reserva in lista_reservas:
+        if reserva["estado"] == ESTADO_RESERVA_ACTIVA:
+            try:
+                fecha_limite = datetime.strptime(reserva["fecha_limite"], "%d-%m-%Y")
+               
+                if fecha_actual.date() > fecha_limite.date():
+                    reserva["estado"] = ESTADO_RESERVA_CANCELADA
+                    cantidad_canceladas += 1
+            except ValueError:
+                pass
+    if cantidad_canceladas > 0:
+        print(f"\n{Color.ROJO}[SISTEMA] Se han cancelado automáticamente {cantidad_canceladas} reserva(s) por superar el plazo de 30 días.{Color.RESET}")
 
 #funcion para mostrar las reservas activas
 def listar_reservas_activas(lista_reservas):
@@ -72,7 +88,7 @@ def buscar_reservas(lista_reservas):
     print("2. Buscar por cliente")
     print("3. Buscar por vendedor")
 
-    opcion = ingresar_entero("Opcion: ")
+    opcion = _input_int("Opcion: ")
 
     match opcion:
         case 1:
@@ -107,14 +123,14 @@ def concretar_venta(lista_reservas):
     print("2. Concretar venta por cliente")
     print("3. Concretar venta por vendedor")
 
-    opcion = ingresar_entero("Opcion: ")
+    opcion = _input_int("Opcion: ")
 
     match opcion:
         case 1:
             auto = input("Ingrese auto: ")
             for nueva_reserva in lista_reservas:
                 if nueva_reserva["auto"].lower() == auto.lower():
-                    nueva_reserva["monto_reserva"] += ingresar_float("Ingresar monto a saldar: ")
+                    nueva_reserva["monto_reserva"] += _input_int("Ingresar monto a saldar: ")
                     nueva_reserva["estado"] = ESTADO_RESERVA_VENTA
                     print("¡Venta concretada y monto actualizado exitosamente!")
 
@@ -122,7 +138,7 @@ def concretar_venta(lista_reservas):
             cliente = input("Ingrese cliente: ").lower()
             for nueva_reserva in lista_reservas:
                 if nueva_reserva["cliente"].lower() == cliente.lower():
-                    nueva_reserva["monto_reserva"] += ingresar_float("Ingresar monto a saldar: ")
+                    nueva_reserva["monto_reserva"] += _input_int("Ingresar monto a saldar: ")
                     nueva_reserva["estado"] = ESTADO_RESERVA_VENTA
                     print("¡Venta concretada y monto actualizado exitosamente!")
 
@@ -130,7 +146,7 @@ def concretar_venta(lista_reservas):
             vendedor = input("Ingrese vendedor: ").lower()
             for nueva_reserva in lista_reservas:
                 if nueva_reserva["vendedor"].lower() == vendedor.lower():
-                    nueva_reserva["monto_reserva"] += ingresar_float("Ingresar monto a saldar: ")
+                    nueva_reserva["monto_reserva"] += _input_int("Ingresar monto a saldar: ")
                     nueva_reserva["estado"] = ESTADO_RESERVA_VENTA
                     print("¡Venta concretada y monto actualizado exitosamente!")
 
@@ -140,7 +156,7 @@ def cancelar_reserva(lista_reservas):
     print("2. Cancelar venta por cliente")
     print("3. Cancelar venta por vendedor")
 
-    opcion = ingresar_entero("Opcion: ")
+    opcion = _input_int("Opcion: ")
 
     match opcion:
         case 1:
@@ -163,24 +179,18 @@ def cancelar_reserva(lista_reservas):
                     nueva_reserva["estado"] = ESTADO_RESERVA_CANCELADA
                     print("¡Reserva cancelada exitosamente!")
 
-#funcion validacion datos entrada
-def ingresar_entero(msj: str) -> int:
-    a_retornar = input(msj)
-
-    while not a_retornar.isnumeric():
-        print("El valor ingresado no es numerico!")
-        a_retornar = input(msj)
-
-    return int(a_retornar)
-
-def ingresar_float(msj: str) -> float:
+# Funcion para validar entrada de tipo int
+def _input_int(mensaje):
     while True:
         try:
-            return float(input(msj))
-        except ValueError:
-            print("El valor ingresado no es un número válido.")
+            # Si la entrada es válida, la convierte a int y la retorna, rompiendo el bucle
+            return int(input(mensaje))
+        except ValueError:  # Atrapa la excepción ValueError
+            # Avisa del error y vuelve a repetir el bucle
+            print(" ⚠️  Ingrese un número válido.")
 
-# Declaramos los colores al principio (fuera de la función o al inicio de tu script)
+
+# Declaro los colores
 class Color:
     ROJO = '\033[91m'
     VERDE = '\033[92m'
@@ -192,6 +202,9 @@ class Color:
 def main_reservas():
     # lista
     lista_reservas = []
+
+    # Verificar y actualizar vencimientos de reservas al iniciar el programa
+    verificar_y_actualizar_vencimientos(lista_reservas)
 
     opcion = -1
 
