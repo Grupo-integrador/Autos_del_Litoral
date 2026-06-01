@@ -165,4 +165,5 @@ def menu_ventas():
                 print("Opción inválida, vuelva a intentarlo.\n")
 
 
-menu_ventas()
+if __name__ == "__main__":
+    menu_ventas()
