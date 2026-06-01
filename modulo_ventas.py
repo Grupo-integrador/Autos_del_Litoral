@@ -59,10 +59,6 @@ def registrar_venta():
                     "estado_pago": input("Agregue el estado del pago: "),
                 }
                 _db_inyectar_datos("db/db_ventas.json", nueva_venta)
-
-            case 2:
-                lectura = _db_leer_datos("db/db_ventas.json")
-                print(json.dumps(lectura, indent=4))
             case 0:
                 print("Volviendo...")
             case _:

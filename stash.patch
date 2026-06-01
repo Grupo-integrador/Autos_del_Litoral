@@ -1,0 +1,150 @@
+diff --git a/db/db_ventas.json b/db/db_ventas.json
+index e69de29..48b580f 100644
+--- a/db/db_ventas.json
++++ b/db/db_ventas.json
+@@ -0,0 +1,30 @@
++[
++    {
++        "id": 1,
++        "fecha_venta": "2026-06-01",
++        "precio_final": "$2000",
++        "forma_pago": "un pago",
++        "estado_pago": "completado"
++    },
++    {
++        "id": 2,
++        "fecha_venta": "2026-06-01",
++        "precio_final": "$12000",
++        "forma_pago": "12 cuotas",
++        "estado_pago": "completado"
++    },
++    {
++        "id": 3,
++        "fecha_venta": "2026-06-01",
++        "precio_final": "$5000",
++        "forma_pago": "3 cuotas",
++        "estado_pago": "incompleto"
++    },
++    {
++        "id": 4,
++        "fecha_venta": "2026-06-01",
++        "precio_final": "$4000",
++        "forma_pago": "un pago",
++        "estado_pago": "completado"
++    }
++]
+\ No newline at end of file
+diff --git a/modulo_ventas.py b/modulo_ventas.py
+index 96a716d..44efeab 100644
+--- a/modulo_ventas.py
++++ b/modulo_ventas.py
+@@ -21,12 +21,13 @@ import json
+ from datetime import date
+ 
+ from utils.dbUtils import _db_inyectar_datos, _db_leer_datos
++from utils.idUtils import _id_autoincremental
+ from utils.validateUtils import _input_int
+ 
+ 
+ # Registrar una venta nueva
+ def registrar_venta():
+-
++    global id_Cliente
+     # TODO:
+     # ⚠️ Importante: cuando se registra una venta, el auto tiene que pasar automáticamente a
+     # estado "vendido". Yo no me tengo que acordar de cambiarlo.
+@@ -44,17 +45,22 @@ def registrar_venta():
+             """)
+ 
+         opcion = _input_int("Seleccione una opcion: ")
++        print("-" * 20)
+ 
+         match opcion:
+             case 1:
++                id_ventas = _id_autoincremental("db/db_ventas.json")
++
++                # print(ultimo_dato["id"])
+                 # TODO:
+                 # TRAER DATOS DE OTROS MODULOS:
+                 # Buscar en el modulo de Autos
+                 # Buscar en el modulo de Clientes
+                 # Buscar en el modulo de Vendedor
+                 nueva_venta = {
++                    "id": id_ventas,
+                     "fecha_venta": str(date.today()),
+-                    "precio_final": int(input("Agregue el precio final: ")),
++                    "precio_final": f"${int(input('Agregue el precio final: '))}",
+                     "forma_pago": input("Agregue la forma de pago: "),
+                     "estado_pago": input("Agregue el estado del pago: "),
+                 }
+@@ -64,14 +70,37 @@ def registrar_venta():
+                 lectura = _db_leer_datos("db/db_ventas.json")
+                 print(json.dumps(lectura, indent=4))
+             case 0:
+-                print("Volviendo...")
++                pass
+             case _:
+                 print("Opción no válida.")
+ 
+ 
+ # Ver todas las ventas hechas
+ def ventas():
+-    pass
++    opcion = -1
++
++    while opcion != 0:
++        print("""
++            ═══════════════════════════════════════════════════
++            💰 VER VENTAS
++            ═══════════════════════════════════════════════════
++             1. Ver lista de todas las ventas hechas.
++             0. Volver al menu de VENTAS.
++            """)
++
++        opcion = _input_int("Seleccione una opcion: ")
++        print("-" * 20)
++
++        match opcion:
++            case 1:
++                print("lista completa:")
++                lectura = _db_leer_datos("db/db_ventas.json")
++                print(json.dumps(lectura, indent=4))
++                print("-" * 20)
++            case 0:
++                pass
++            case _:
++                print("Opción no válida.")
+ 
+ 
+ # Buscar una venta por patente del auto, por DNI del cliente, o por vendedor
+@@ -108,20 +137,20 @@ def menu_ventas():
+             """)
+ 
+         opcion = _input_int("Seleccione una opcion: ")
+-
++        print("-" * 20)
+         match opcion:
+-            case 0:
+-                print("\n*Usted salio del programa*")
+             case 1:
+                 registrar_venta()
+             case 2:
+-                print("Todas las ventas...")
++                ventas()
+             case 3:
+                 print("Venta por Patente, DNI, Vendedor")
+             case 4:
+                 print("Se modifico el estado del pago")
+             case 5:
+                 print("Se elimino una venta")
++            case 0:
++                print("\n*Usted salio del programa*")
+             case _:
+                 print("Opción inválida, vuelva a intentarlo.\n")
+ 
+diff --git a/utils/__pycache__/dbUtils.cpython-312.pyc b/utils/__pycache__/dbUtils.cpython-312.pyc
+index baa5e56..2880042 100644
+Binary files a/utils/__pycache__/dbUtils.cpython-312.pyc and b/utils/__pycache__/dbUtils.cpython-312.pyc differ
+diff --git a/utils/__pycache__/validateUtils.cpython-312.pyc b/utils/__pycache__/validateUtils.cpython-312.pyc
+index 919dfe5..0ae29b5 100644
+Binary files a/utils/__pycache__/validateUtils.cpython-312.pyc and b/utils/__pycache__/validateUtils.cpython-312.pyc differ
