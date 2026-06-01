@@ -1,11 +1,11 @@
-from datetime import datetime
 from datetime import datetime, timedelta
 
-ESTADO_RESERVA_ACTIVA='activa'
-ESTADO_RESERVA_VENTA='venta'
-ESTADO_RESERVA_CANCELADA='cancelada'
+ESTADO_RESERVA_ACTIVA = "activa"
+ESTADO_RESERVA_VENTA = "venta"
+ESTADO_RESERVA_CANCELADA = "cancelada"
 
-#funcion para agregar reservas mediante un diccionario a la lista de reservas
+
+# funcion para agregar reservas mediante un diccionario a la lista de reservas
 def registrar_nueva_reserva(lista_reservas):
     print("--- NUEVA RESERVA ---")
 
@@ -14,36 +14,36 @@ def registrar_nueva_reserva(lista_reservas):
     cliente = input("Ingresar cliente: ").lower()
     vendedor = input("Ingresar vendedor: ").lower()
     monto_reserva = ingresar_float("Ingresar monto_reserva: ")
-    
-    
+
     momento_actual = datetime.now()
-    momento_limite = momento_actual + timedelta(days=30) #fecha limite
-    
+    momento_limite = momento_actual + timedelta(days=30)  # fecha limite
+
     # Convertimos ambas a texto para guardarlas en el diccionario
     fecha_reserva_texto = momento_actual.strftime("%d-%m-%Y")
     fecha_limite_texto = momento_limite.strftime("%d-%m-%Y")
-    
+
     id = 1
-    if (len(lista_reservas)>0):
+    if len(lista_reservas) > 0:
         ultima_reserva = lista_reservas[-1]
-        id = ultima_reserva["id_key"]+1
+        id = ultima_reserva["id_key"] + 1
 
     nueva_reserva = {
         "id_key": id,
-        "numero_unico": numero_unico, #345
-        "auto": auto, # fiat cronos - AD987CE
-        "cliente": cliente, # Carlos López
-        "vendedor": vendedor, # Pedro Martínez
-        "monto_reserva": monto_reserva, # 400000
-        "fecha_reserva": fecha_reserva_texto, # 25-05-2026
-        "fecha_limite": fecha_limite_texto, # 25-06-2026
-        "estado": ESTADO_RESERVA_ACTIVA
+        "numero_unico": numero_unico,  # 345
+        "auto": auto,  # fiat cronos - AD987CE
+        "cliente": cliente,  # Carlos López
+        "vendedor": vendedor,  # Pedro Martínez
+        "monto_reserva": monto_reserva,  # 400000
+        "fecha_reserva": fecha_reserva_texto,  # 25-05-2026
+        "fecha_limite": fecha_limite_texto,  # 25-06-2026
+        "estado": ESTADO_RESERVA_ACTIVA,
     }
-    
+
     lista_reservas.append(nueva_reserva)
     print(f"¡Reserva guardada! Vence el: {fecha_limite_texto}")
 
-#funcion para mostrar las reservas activas
+
+# funcion para mostrar las reservas activas
 def listar_reservas_activas(lista_reservas):
     if len(lista_reservas) == 0:
         print("No hay reservas registradas")
@@ -65,7 +65,8 @@ def listar_reservas_activas(lista_reservas):
         else:
             print("No hay reservas activas")
 
-#funcion para buscar reservas
+
+# funcion para buscar reservas
 def buscar_reservas(lista_reservas):
 
     print("1. Buscar por auto")
@@ -101,7 +102,8 @@ def buscar_reservas(lista_reservas):
             print("No se encontró una reserva para el vendedor especificado.")
             return
 
-#funcion para concretar ventas
+
+# funcion para concretar ventas
 def concretar_venta(lista_reservas):
     print("1. Concretar venta por auto")
     print("2. Concretar venta por cliente")
@@ -114,7 +116,9 @@ def concretar_venta(lista_reservas):
             auto = input("Ingrese auto: ")
             for nueva_reserva in lista_reservas:
                 if nueva_reserva["auto"].lower() == auto.lower():
-                    nueva_reserva["monto_reserva"] += ingresar_float("Ingresar monto a saldar: ")
+                    nueva_reserva["monto_reserva"] += ingresar_float(
+                        "Ingresar monto a saldar: "
+                    )
                     nueva_reserva["estado"] = ESTADO_RESERVA_VENTA
                     print("¡Venta concretada y monto actualizado exitosamente!")
 
@@ -122,7 +126,9 @@ def concretar_venta(lista_reservas):
             cliente = input("Ingrese cliente: ").lower()
             for nueva_reserva in lista_reservas:
                 if nueva_reserva["cliente"].lower() == cliente.lower():
-                    nueva_reserva["monto_reserva"] += ingresar_float("Ingresar monto a saldar: ")
+                    nueva_reserva["monto_reserva"] += ingresar_float(
+                        "Ingresar monto a saldar: "
+                    )
                     nueva_reserva["estado"] = ESTADO_RESERVA_VENTA
                     print("¡Venta concretada y monto actualizado exitosamente!")
 
@@ -130,11 +136,14 @@ def concretar_venta(lista_reservas):
             vendedor = input("Ingrese vendedor: ").lower()
             for nueva_reserva in lista_reservas:
                 if nueva_reserva["vendedor"].lower() == vendedor.lower():
-                    nueva_reserva["monto_reserva"] += ingresar_float("Ingresar monto a saldar: ")
+                    nueva_reserva["monto_reserva"] += ingresar_float(
+                        "Ingresar monto a saldar: "
+                    )
                     nueva_reserva["estado"] = ESTADO_RESERVA_VENTA
                     print("¡Venta concretada y monto actualizado exitosamente!")
 
-#funcion para cancelar reservas
+
+# funcion para cancelar reservas
 def cancelar_reserva(lista_reservas):
     print("1. Cancelar venta por auto")
     print("2. Cancelar venta por cliente")
@@ -163,7 +172,8 @@ def cancelar_reserva(lista_reservas):
                     nueva_reserva["estado"] = ESTADO_RESERVA_CANCELADA
                     print("¡Reserva cancelada exitosamente!")
 
-#funcion validacion datos entrada
+
+# funcion validacion datos entrada
 def ingresar_entero(msj: str) -> int:
     a_retornar = input(msj)
 
@@ -173,6 +183,7 @@ def ingresar_entero(msj: str) -> int:
 
     return int(a_retornar)
 
+
 def ingresar_float(msj: str) -> float:
     while True:
         try:
@@ -180,14 +191,16 @@ def ingresar_float(msj: str) -> float:
         except ValueError:
             print("El valor ingresado no es un número válido.")
 
+
 # Declaramos los colores al principio (fuera de la función o al inicio de tu script)
 class Color:
-    ROJO = '\033[91m'
-    VERDE = '\033[92m'
-    AMARILLO = '\033[93m'
-    AZUL = '\033[94m'
-    CYAN = '\033[96m'
-    RESET = '\033[0m'
+    ROJO = "\033[91m"
+    VERDE = "\033[92m"
+    AMARILLO = "\033[93m"
+    AZUL = "\033[94m"
+    CYAN = "\033[96m"
+    RESET = "\033[0m"
+
 
 def main_reservas():
     # lista
@@ -199,7 +212,7 @@ def main_reservas():
         print("\n")
         # Pintamos el título principal de color Cyan
         print(f"{Color.CYAN}=== RESERVAS ==={Color.RESET}")
-        
+
         # Pintamos los números de las opciones en Azul para que resalten
         print(f"{Color.AZUL}1.{Color.RESET} Registrar una nueva reserva ")
         print(f"{Color.AZUL}2.{Color.RESET} Listar reservas activas ")
@@ -207,22 +220,22 @@ def main_reservas():
         print(f"{Color.AZUL}4.{Color.RESET} Concretar venta ")
         print(f"{Color.AZUL}5.{Color.RESET} Cancelar reserva")
         print(f"{Color.ROJO}0.{Color.RESET} Salir")
-        
+
         print(f"{Color.AMARILLO}Elegi una opcion:{Color.RESET}")
         opcion = int(input())
 
         match opcion:
             case 1:
-                registrar_nueva_reserva(lista_reservas) #parametro
+                registrar_nueva_reserva(lista_reservas)  # parametro
             case 2:
                 listar_reservas_activas(lista_reservas)
             case 3:
                 buscar_reservas(lista_reservas)
             case 4:
-                concretar_venta(lista_reservas)  
+                concretar_venta(lista_reservas)
             case 5:
                 cancelar_reserva(lista_reservas)
-            
+
             case 0:
                 print(f"\n{Color.VERDE}*Usted salio del programa*{Color.RESET}")
                 break
@@ -230,4 +243,8 @@ def main_reservas():
                 # Mensaje de error en Rojo
                 print(f"{Color.ROJO}Opción inválida, vuelve a intentarlo{Color.RESET}")
 
-main_reservas()
+
+# main_reservas()
+
+if __name__ == "__main__":
+    main_reservas()
