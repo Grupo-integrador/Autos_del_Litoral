@@ -1,9 +1,9 @@
-#date, fecha de ingreso al stock, al importar date se crea con fecha real
+# date, fecha de ingreso al stock, al importar date se crea con fecha real
 from datetime import date
 
-print("=== EL PROGRAMA ESTA ARRANCANDO CORRECTAMENTE ===")
+# print("=== EL PROGRAMA ESTA ARRANCANDO CORRECTAMENTE ===")
 
-#aca creamos la lista y adentro un diccionario pares clave valor, la lista es mutable, y un diccionario para cada auto
+# aca creamos la lista y adentro un diccionario pares clave valor, la lista es mutable, y un diccionario para cada auto
 #
 
 lista_autos = [
@@ -16,32 +16,48 @@ lista_autos = [
         "kilometros": 120000,
         "precio": 4500000,
         "estado": "disponible",
-        "fecha_ingreso": date(2026, 3, 15)
+        "fecha_ingreso": date(2026, 3, 15),
     }
 ]
 
-siguiente_id_auto = 2        #contador, el 1 es el corsa, ya cargado para que sea mas facil programar el codigo. arranca con 2
+siguiente_id_auto = 2  # contador, el 1 es el corsa, ya cargado para que sea mas facil programar el codigo. arranca con 2
+
 
 def pedir_entero(mensaje):
-    while True:              #dentro de un bucle, convierte la entrada a numero
+    while True:  # dentro de un bucle, convierte la entrada a numero
         try:
             valor = int(input(mensaje))
             return valor
-        except ValueError:     ###use escept si el usuario se equivoca en datos de km o precio el prog se cierra y no carga 
+        except ValueError:  ###use escept si el usuario se equivoca en datos de km o precio el prog se cierra y no carga
             print("Error: Ingrese un numero entero valido.")
 
+
 def pedir_estado_valido():
-    estados_permitidos = ["disponible", "reservado", "vendido", "en taller"]   #4 pautas pedidas por el dueño   
+    estados_permitidos = [
+        "disponible",
+        "reservado",
+        "vendido",
+        "en taller",
+    ]  # 4 pautas pedidas por el dueño
     while True:
-        estado = input("Ingrese estado (disponible/reservado/vendido/en taller): ").lower().strip()  #minuscula y borra los espacios en blanco
-        if estado in estados_permitidos:          #busca dentro de la lista el estado valido, si no esta vuelve a preg. con while
+        estado = (
+            input("Ingrese estado (disponible/reservado/vendido/en taller): ")
+            .lower()
+            .strip()
+        )  # minuscula y borra los espacios en blanco
+        if (
+            estado in estados_permitidos
+        ):  # busca dentro de la lista el estado valido, si no esta vuelve a preg. con while
             return estado
         print("Estado invalido.")
+
 
 def cargar_auto_nuevo():
     global siguiente_id_auto
     print("\n--- CARGAR NUEVO AUTO ---")
-    patente = input("Patente: ").upper().strip()  #mayusculas y sin espacios para la patente y avitar errores de carga y busqueda
+    patente = (
+        input("Patente: ").upper().strip()
+    )  # mayusculas y sin espacios para la patente y avitar errores de carga y busqueda
     marca = input("Marca: ").strip()
     modelo = input("Modelo: ").strip()
     anio = pedir_entero("Año: ")
@@ -49,9 +65,9 @@ def cargar_auto_nuevo():
     precio = pedir_entero("Precio de venta: ")
     estado = pedir_estado_valido()
     fecha_actual = date.today()
-    
+
     ##diccionario para registro del auto
-    nuevo_auto = {                          
+    nuevo_auto = {
         "id": siguiente_id_auto,
         "patente": patente,
         "marca": marca,
@@ -60,11 +76,12 @@ def cargar_auto_nuevo():
         "kilometros": kilometros,
         "precio": precio,
         "estado": estado,
-        "fecha_ingreso": fecha_actual
+        "fecha_ingreso": fecha_actual,
     }
     lista_autos.append(nuevo_auto)
     print("Auto cargado con exito.")
-    siguiente_id_auto += 1                    #suma 1 a la variable global
+    siguiente_id_auto += 1  # suma 1 a la variable global
+
 
 def ver_listado_autos():
     print("\n--- LISTADO DE AUTOS EN STOCK ---")
@@ -85,11 +102,13 @@ def ver_listado_autos():
             continue
         elif opcion_filtro == "2" and estado_buscar != auto["estado"].lower():
             continue
-        print(f"ID: {auto['id']} | Patente: {auto['patente']} | {auto['marca']} {auto['modelo']}")
+        print(
+            f"ID: {auto['id']} | Patente: {auto['patente']} | {auto['marca']} {auto['modelo']}"
+        )
         print(f"Estado: {auto['estado']} | Precio: ${auto['precio']}")
         print("-" * 30)
 
-        
+
 ##funciones que retornan valores. buscar el auto de 2 formas en nuestra lista de diccionarios
 def buscar_auto():
     print("\n--- BUSCAR AUTO ---")
@@ -107,6 +126,7 @@ def buscar_auto():
                 return auto
     return None
 
+
 def cambiar_estado_auto():
     auto = buscar_auto()
     if auto is None:
@@ -115,6 +135,7 @@ def cambiar_estado_auto():
     print(f"Estado actual: {auto['estado']}")
     auto["estado"] = pedir_estado_valido()
     print("Estado actualizado.")
+
 
 def dar_de_baja_auto():
     auto = buscar_auto()
@@ -125,6 +146,7 @@ def dar_de_baja_auto():
     if confirmacion == "S":
         lista_autos.remove(auto)
         print("Eliminado.")
+
 
 def menu_autos():
     while True:
@@ -145,6 +167,7 @@ def menu_autos():
         elif opcion == "9":
             break
 
+
 def main_concesionaria():
     while True:
         print("\n=== AUTOS DEL LITORAL ===")
@@ -156,6 +179,11 @@ def main_concesionaria():
             print("Saliendo...")
             break
 
-main_concesionaria()           #funcion principal, punto de entrada. como no tiene def y esta pegada al margen izq, es una 
-#orden de ejecucion, en el recorrido del codido fue recolectando la info. comienza desde aca a buscar donde se definio.
-#def son solo declaraciones  que se guardan en memoria pero no se ejecutan 
+
+# main_concesionaria()  # funcion principal, punto de entrada. como no tiene def y esta pegada al margen izq, es una
+# orden de ejecucion, en el recorrido del codido fue recolectando la info. comienza desde aca a buscar donde se definio.
+# def son solo declaraciones  que se guardan en memoria pero no se ejecutan
+
+if __name__ == "__main__":
+    print("=== EL PROGRAMA ESTA ARRANCANDO CORRECTAMENTE ===")
+    main_concesionaria()
