@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from utils.validateUtils import _input_int, Color
 
 ESTADO_RESERVA_ACTIVA = "activa"
 ESTADO_RESERVA_VENTA = "venta"
@@ -46,7 +47,6 @@ def registrar_nueva_reserva(lista_reservas):
 #funcion para verificar y actualizar reservas vencidas
 def verificar_y_actualizar_vencimientos(lista_reservas):
     fecha_actual = datetime.now()
-    cantidad_canceladas = 0
     for reserva in lista_reservas:
         if reserva["estado"] == ESTADO_RESERVA_ACTIVA:
             try:
@@ -54,11 +54,8 @@ def verificar_y_actualizar_vencimientos(lista_reservas):
                
                 if fecha_actual.date() > fecha_limite.date():
                     reserva["estado"] = ESTADO_RESERVA_CANCELADA
-                    cantidad_canceladas += 1
             except ValueError:
                 pass
-    if cantidad_canceladas > 0:
-        print(f"\n{Color.ROJO}[SISTEMA] Se han cancelado automáticamente {cantidad_canceladas} reserva(s) por superar el plazo de 30 días.{Color.RESET}")
 
 #funcion para mostrar las reservas activas
 def listar_reservas_activas(lista_reservas):
@@ -183,25 +180,9 @@ def cancelar_reserva(lista_reservas):
                     nueva_reserva["estado"] = ESTADO_RESERVA_CANCELADA
                     print("¡Reserva cancelada exitosamente!")
 
-# Funcion para validar entrada de tipo int
-def _input_int(mensaje):
-    while True:
-        try:
-            # Si la entrada es válida, la convierte a int y la retorna, rompiendo el bucle
-            return int(input(mensaje))
-        except ValueError:  # Atrapa la excepción ValueError
-            # Avisa del error y vuelve a repetir el bucle
-            print(" ⚠️  Ingrese un número válido.")
 
 
-# Declaro los colores
-class Color:
-    ROJO = "\033[91m"
-    VERDE = "\033[92m"
-    AMARILLO = "\033[93m"
-    AZUL = "\033[94m"
-    CYAN = "\033[96m"
-    RESET = "\033[0m"
+
 
 
 def main_reservas():
@@ -227,7 +208,7 @@ def main_reservas():
         print(f"{Color.ROJO}0.{Color.RESET} Salir")
 
         print(f"{Color.AMARILLO}Elegi una opcion:{Color.RESET}")
-        opcion = int(input())
+        opcion = _input_int("Seleccione una opcion: ")
 
         match opcion:
             case 1:
