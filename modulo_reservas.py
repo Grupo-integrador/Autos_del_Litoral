@@ -5,7 +5,7 @@ ESTADO_RESERVA_ACTIVA='activa'
 ESTADO_RESERVA_VENTA='venta'
 ESTADO_RESERVA_CANCELADA='cancelada'
 
-
+#funcion para agregar reservas mediante un diccionario a la lista de reservas
 def registrar_nueva_reserva(lista_reservas):
     print("--- NUEVA RESERVA ---")
 
@@ -43,6 +43,7 @@ def registrar_nueva_reserva(lista_reservas):
     lista_reservas.append(nueva_reserva)
     print(f"¡Reserva guardada! Vence el: {fecha_limite_texto}")
 
+#funcion para mostrar las reservas activas
 def listar_reservas_activas(lista_reservas):
     if len(lista_reservas) == 0:
         print("No hay reservas registradas")
@@ -64,6 +65,7 @@ def listar_reservas_activas(lista_reservas):
         else:
             print("No hay reservas activas")
 
+#funcion para buscar reservas
 def buscar_reservas(lista_reservas):
 
     print("1. Buscar por auto")
@@ -99,6 +101,7 @@ def buscar_reservas(lista_reservas):
             print("No se encontró una reserva para el vendedor especificado.")
             return
 
+#funcion para concretar ventas
 def concretar_venta(lista_reservas):
     print("1. Concretar venta por auto")
     print("2. Concretar venta por cliente")
@@ -131,7 +134,7 @@ def concretar_venta(lista_reservas):
                     nueva_reserva["estado"] = ESTADO_RESERVA_VENTA
                     print("¡Venta concretada y monto actualizado exitosamente!")
 
-
+#funcion para cancelar reservas
 def cancelar_reserva(lista_reservas):
     print("1. Cancelar venta por auto")
     print("2. Cancelar venta por cliente")
@@ -160,6 +163,7 @@ def cancelar_reserva(lista_reservas):
                     nueva_reserva["estado"] = ESTADO_RESERVA_CANCELADA
                     print("¡Reserva cancelada exitosamente!")
 
+#funcion validacion datos entrada
 def ingresar_entero(msj: str) -> int:
     a_retornar = input(msj)
 
@@ -176,40 +180,54 @@ def ingresar_float(msj: str) -> float:
         except ValueError:
             print("El valor ingresado no es un número válido.")
 
+# Declaramos los colores al principio (fuera de la función o al inicio de tu script)
+class Color:
+    ROJO = '\033[91m'
+    VERDE = '\033[92m'
+    AMARILLO = '\033[93m'
+    AZUL = '\033[94m'
+    CYAN = '\033[96m'
+    RESET = '\033[0m'
+
 def main_reservas():
-        # lista
-        lista_reservas = []
+    # lista
+    lista_reservas = []
 
-        opcion = -1
+    opcion = -1
 
-        while opcion != 0:
-            print("\n")
-            print("=== RESERVAS ===")
-            print("1. Registrar una nueva reserva ")
-            print("2. Listar reservas activas ")
-            print("3. Buscar reservas ")
-            print("4. Concretar venta ")
-            print("5. Cancelar reserva")
-            print("0. Salir")
-            print("Elegi una opcion:")
-            opcion = int(input())
+    while opcion != 0:
+        print("\n")
+        # Pintamos el título principal de color Cyan
+        print(f"{Color.CYAN}=== RESERVAS ==={Color.RESET}")
+        
+        # Pintamos los números de las opciones en Azul para que resalten
+        print(f"{Color.AZUL}1.{Color.RESET} Registrar una nueva reserva ")
+        print(f"{Color.AZUL}2.{Color.RESET} Listar reservas activas ")
+        print(f"{Color.AZUL}3.{Color.RESET} Buscar reservas ")
+        print(f"{Color.AZUL}4.{Color.RESET} Concretar venta ")
+        print(f"{Color.AZUL}5.{Color.RESET} Cancelar reserva")
+        print(f"{Color.ROJO}0.{Color.RESET} Salir")
+        
+        print(f"{Color.AMARILLO}Elegi una opcion:{Color.RESET}")
+        opcion = int(input())
 
-            match opcion:
-                case 1:
-                      registrar_nueva_reserva(lista_reservas) #parametro
-                case 2:
-                      listar_reservas_activas(lista_reservas)
-                case 3:
-                      buscar_reservas(lista_reservas)
-                case 4:
-                      concretar_venta(lista_reservas)  
-                case 5:
-                      cancelar_reserva(lista_reservas)
-                    
-                case 0:
-                    print("\n*Usted salio del programa*")
-                    break
-                case _:  # como el default: en c
-                    print("opcion invalida, vuelve a intentarlo")
+        match opcion:
+            case 1:
+                registrar_nueva_reserva(lista_reservas) #parametro
+            case 2:
+                listar_reservas_activas(lista_reservas)
+            case 3:
+                buscar_reservas(lista_reservas)
+            case 4:
+                concretar_venta(lista_reservas)  
+            case 5:
+                cancelar_reserva(lista_reservas)
+            
+            case 0:
+                print(f"\n{Color.VERDE}*Usted salio del programa*{Color.RESET}")
+                break
+            case _:  # como el default: en c
+                # Mensaje de error en Rojo
+                print(f"{Color.ROJO}Opción inválida, vuelve a intentarlo{Color.RESET}")
 
 main_reservas()
