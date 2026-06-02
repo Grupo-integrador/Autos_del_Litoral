@@ -10,10 +10,9 @@ ESTADO_RESERVA_CANCELADA = "cancelada"
 def registrar_nueva_reserva(lista_reservas):
     print("--- NUEVA RESERVA ---")
 
-    numero_unico = _input_int("Ingresar numero unico: ")
-    auto = input("Ingresar auto: ").lower()
-    cliente = input("Ingresar cliente: ").lower()
-    vendedor = input("Ingresar vendedor: ").lower()
+    auto = _input_int("Ingresar id del auto: ")
+    cliente = _input_int("Ingresar id del cliente: ")
+    vendedor = _input_int("Ingresar id del vendedor: ")
     monto_reserva = _input_int("Ingresar monto_reserva: ")
     
     
@@ -27,16 +26,15 @@ def registrar_nueva_reserva(lista_reservas):
     id = 1
     if len(lista_reservas) > 0:
         ultima_reserva = lista_reservas[-1]
-        id = ultima_reserva["id_key"] + 1
+        id = ultima_reserva["id"] + 1
 
     nueva_reserva = {
-        "id_key": id,
-        "numero_unico": numero_unico,  # 345
-        "auto": auto,  # fiat cronos - AD987CE
-        "cliente": cliente,  # Carlos López
-        "vendedor": vendedor,  # Pedro Martínez
-        "monto_reserva": monto_reserva,  # 400000
+        "id": id, # 1
+        "id_auto": auto,  # 12
+        "id_cliente": cliente,  # 7
+        "id_vendedor": vendedor,  # 2
         "fecha_reserva": fecha_reserva_texto,  # 25-05-2026
+        "monto_sena": monto_reserva,  # 400000
         "fecha_limite": fecha_limite_texto,  # 25-06-2026
         "estado": ESTADO_RESERVA_ACTIVA,
     }
@@ -66,12 +64,11 @@ def listar_reservas_activas(lista_reservas):
     for nueva_reserva in lista_reservas:
         if nueva_reserva["estado"] == ESTADO_RESERVA_ACTIVA:
             print("-" * 20)
-            print(f"ID: {nueva_reserva['id_key']}")
-            print(f"Número único: {nueva_reserva['numero_unico']}")
-            print(f"Auto: {nueva_reserva['auto']}")
-            print(f"Cliente: {nueva_reserva['cliente']}")
-            print(f"Vendedor: {nueva_reserva['vendedor']}")
-            print(f"Monto reserva: ${nueva_reserva['monto_reserva']}")
+            print(f"ID: {nueva_reserva['id']}")
+            print(f"ID del auto: {nueva_reserva['id_auto']}")
+            print(f"ID del cliente: {nueva_reserva['id_cliente']}")
+            print(f"ID del vendedor: {nueva_reserva['id_vendedor']}")
+            print(f"Monto de la reserva: ${nueva_reserva['monto_sena']}")
             print(f"Fecha reserva: {nueva_reserva['fecha_reserva']}")
             print(f"Fecha límite: {nueva_reserva['fecha_limite']}")
             print(f"Estado: {nueva_reserva['estado']}")
@@ -83,34 +80,34 @@ def listar_reservas_activas(lista_reservas):
 # funcion para buscar reservas
 def buscar_reservas(lista_reservas):
 
-    print("1. Buscar por auto")
-    print("2. Buscar por cliente")
-    print("3. Buscar por vendedor")
+    print("1. Buscar por id de auto")
+    print("2. Buscar por id de cliente")
+    print("3. Buscar por id de vendedor")
 
     opcion = _input_int("Opcion: ")
 
     match opcion:
         case 1:
-            auto = input("Ingrese auto: ")
+            auto = _input_int("Ingrese id del auto: ")
             for nueva_reserva in lista_reservas:
-                if nueva_reserva["auto"].lower() == auto.lower():
+                if nueva_reserva["id_auto"] == auto:
                     print(nueva_reserva)
                     return
             print("No se encontró una reserva para el auto especificado.")
             return
         case 2:
-            cliente = input("Ingrese cliente: ").lower()
+            cliente = _input_int("Ingrese id del cliente: ")
             for nueva_reserva in lista_reservas:
-                if nueva_reserva["cliente"].lower() == cliente.lower():
+                if nueva_reserva["id_cliente"] == cliente:
                     print(nueva_reserva)
                     return
             print("No se encontró una reserva para el cliente especificado.")
             return
 
         case 3:
-            vendedor = input("Ingrese vendedor: ").lower()
+            vendedor = _input_int("Ingrese id del vendedor: ")
             for nueva_reserva in lista_reservas:
-                if nueva_reserva["vendedor"].lower() == vendedor.lower():
+                if nueva_reserva["id_vendedor"] == vendedor:
                     print(nueva_reserva)
                     return
             print("No se encontró una reserva para el vendedor especificado.")
@@ -119,70 +116,66 @@ def buscar_reservas(lista_reservas):
 
 # funcion para concretar ventas
 def concretar_venta(lista_reservas):
-    print("1. Concretar venta por auto")
-    print("2. Concretar venta por cliente")
-    print("3. Concretar venta por vendedor")
+    print("1. Concretar venta por id de auto")
+    print("2. Concretar venta por id de cliente")
+    print("3. Concretar venta por id de vendedor")
 
     opcion = _input_int("Opcion: ")
 
     match opcion:
         case 1:
-            auto = input("Ingrese auto: ")
+            auto = _input_int("Ingrese auto: ")
             for nueva_reserva in lista_reservas:
-                if nueva_reserva["auto"].lower() == auto.lower():
-                    nueva_reserva["monto_reserva"] += _input_int("Ingresar monto a saldar: ")
+                if nueva_reserva["id_auto"] == auto:
+                    nueva_reserva["monto_sena"] += _input_int("Ingresar monto a saldar: ")
                     nueva_reserva["estado"] = ESTADO_RESERVA_VENTA
                     print("¡Venta concretada y monto actualizado exitosamente!")
 
         case 2:
-            cliente = input("Ingrese cliente: ").lower()
+            cliente = _input_int("Ingrese cliente: ")
             for nueva_reserva in lista_reservas:
-                if nueva_reserva["cliente"].lower() == cliente.lower():
-                    nueva_reserva["monto_reserva"] += _input_int("Ingresar monto a saldar: ")
+                if nueva_reserva["id_cliente"] == cliente:
+                    nueva_reserva["monto_sena"] += _input_int("Ingresar monto a saldar: ")
                     nueva_reserva["estado"] = ESTADO_RESERVA_VENTA
                     print("¡Venta concretada y monto actualizado exitosamente!")
 
         case 3:
-            vendedor = input("Ingrese vendedor: ").lower()
+            vendedor = _input_int("Ingrese vendedor: ")
             for nueva_reserva in lista_reservas:
-                if nueva_reserva["vendedor"].lower() == vendedor.lower():
-                    nueva_reserva["monto_reserva"] += _input_int("Ingresar monto a saldar: ")
+                if nueva_reserva["id_vendedor"] == vendedor:
+                    nueva_reserva["monto_sena"] += _input_int("Ingresar monto a saldar: ")
                     nueva_reserva["estado"] = ESTADO_RESERVA_VENTA
                     print("¡Venta concretada y monto actualizado exitosamente!")
 
 
 # funcion para cancelar reservas
 def cancelar_reserva(lista_reservas):
-    print("1. Cancelar venta por auto")
-    print("2. Cancelar venta por cliente")
-    print("3. Cancelar venta por vendedor")
+    print("1. Cancelar venta por id de auto")
+    print("2. Cancelar venta por id de cliente")
+    print("3. Cancelar venta por id de vendedor")
 
     opcion = _input_int("Opcion: ")
 
     match opcion:
         case 1:
-            auto = input("Ingrese auto: ")
+            auto = _input_int("Ingrese id del auto: ")
             for nueva_reserva in lista_reservas:
-                if nueva_reserva["auto"].lower() == auto.lower():
+                if nueva_reserva["auto"] == auto:
                     nueva_reserva["estado"] = ESTADO_RESERVA_CANCELADA
                     print("¡Reserva cancelada exitosamente!")
         case 2:
-            cliente = input("Ingrese cliente: ").lower()
+            cliente = _input_int("Ingrese id del cliente: ")
             for nueva_reserva in lista_reservas:
-                if nueva_reserva["cliente"].lower() == cliente.lower():
+                if nueva_reserva["cliente"] == cliente:
                     nueva_reserva["estado"] = ESTADO_RESERVA_CANCELADA
                     print("¡Reserva cancelada exitosamente!")
 
         case 3:
-            vendedor = input("Ingrese vendedor: ").lower()
+            vendedor = _input_int("Ingrese id del vendedor: ")
             for nueva_reserva in lista_reservas:
-                if nueva_reserva["vendedor"].lower() == vendedor.lower():
+                if nueva_reserva["vendedor"] == vendedor:
                     nueva_reserva["estado"] = ESTADO_RESERVA_CANCELADA
                     print("¡Reserva cancelada exitosamente!")
-
-
-
-
 
 
 def main_reservas():
