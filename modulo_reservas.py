@@ -1,8 +1,9 @@
-from datetime import datetime, timedelta
+from datetime import date, timedelta
 from utils.validateUtils import _input_int, Color
+#from modulo_autos
 
 ESTADO_RESERVA_ACTIVA = "activa"
-ESTADO_RESERVA_VENTA = "venta"
+ESTADO_RESERVA_VENTA = "concretada"
 ESTADO_RESERVA_CANCELADA = "cancelada"
 
 
@@ -16,14 +17,11 @@ def registrar_nueva_reserva(lista_reservas):
     monto_reserva = _input_int("Ingresar monto_reserva: ")
     
     
-    momento_actual = datetime.now()
+    momento_actual = date.today()
     momento_limite = momento_actual + timedelta(days=30)  # fecha limite
 
-    # Convertimos ambas a texto para guardarlas en el diccionario
-    fecha_reserva_texto = momento_actual.strftime("%d-%m-%Y")
-    fecha_limite_texto = momento_limite.strftime("%d-%m-%Y")
 
-    id = 1
+    id = 1 
     if len(lista_reservas) > 0:
         ultima_reserva = lista_reservas[-1]
         id = ultima_reserva["id"] + 1
@@ -33,27 +31,25 @@ def registrar_nueva_reserva(lista_reservas):
         "id_auto": auto,  # 12
         "id_cliente": cliente,  # 7
         "id_vendedor": vendedor,  # 2
-        "fecha_reserva": fecha_reserva_texto,  # 25-05-2026
+        "fecha_reserva": momento_actual,  # date(2026, 4, 25)
         "monto_sena": monto_reserva,  # 400000
-        "fecha_limite": fecha_limite_texto,  # 25-06-2026
+        "fecha_limite": momento_limite,  # date(2026, 4, 25)
         "estado": ESTADO_RESERVA_ACTIVA,
     }
 
     lista_reservas.append(nueva_reserva)
+
+    # como lo pide la documentacion
+    fecha_limite_texto = momento_limite.strftime("%d-%m-%Y")
     print(f"¡Reserva guardada! Vence el: {fecha_limite_texto}")
 
 #funcion para verificar y actualizar reservas vencidas
 def verificar_y_actualizar_vencimientos(lista_reservas):
-    fecha_actual = datetime.now()
+    fecha_actual = date.today()
     for reserva in lista_reservas:
         if reserva["estado"] == ESTADO_RESERVA_ACTIVA:
-            try:
-                fecha_limite = datetime.strptime(reserva["fecha_limite"], "%d-%m-%Y")
-               
-                if fecha_actual.date() > fecha_limite.date():
-                    reserva["estado"] = ESTADO_RESERVA_CANCELADA
-            except ValueError:
-                pass
+            if fecha_actual > reserva["fecha_limite"]:
+                reserva["estado"] = ESTADO_RESERVA_CANCELADA
 
 #funcion para mostrar las reservas activas
 def listar_reservas_activas(lista_reservas):
@@ -78,6 +74,7 @@ def listar_reservas_activas(lista_reservas):
 
 
 # funcion para buscar reservas
+# funcion para buscar reservas
 def buscar_reservas(lista_reservas):
 
     print("1. Buscar por id de auto")
@@ -89,30 +86,39 @@ def buscar_reservas(lista_reservas):
     match opcion:
         case 1:
             auto = _input_int("Ingrese id del auto: ")
-            for nueva_reserva in lista_reservas:
-                if nueva_reserva["id_auto"] == auto:
-                    print(nueva_reserva)
-                    return
-            print("No se encontró una reserva para el auto especificado.")
-            return
+            encontrado = False 
+            for reserva in lista_reservas:
+                if reserva["id_auto"] == auto:
+                    print("-" * 20)
+                    print(f"ID Reserva: {reserva['id']} | Estado: {reserva['estado']} | Monto: ${reserva['monto_sena']}")
+                    encontrado = True
+            
+            if not encontrado:
+                print(f"{Color.ROJO}No se encontró ninguna reserva para el auto especificado.{Color.RESET}")
+
         case 2:
             cliente = _input_int("Ingrese id del cliente: ")
-            for nueva_reserva in lista_reservas:
-                if nueva_reserva["id_cliente"] == cliente:
-                    print(nueva_reserva)
-                    return
-            print("No se encontró una reserva para el cliente especificado.")
-            return
+            encontrado = False
+            for reserva in lista_reservas:
+                if reserva["id_cliente"] == cliente:
+                    print("-" * 20)
+                    print(f"ID Reserva: {reserva['id']} | Auto: {reserva['id_auto']} | Estado: {reserva['estado']}")
+                    encontrado = True
+            
+            if not encontrado:
+                print(f"{Color.ROJO}No se encontró ninguna reserva para el cliente especificado.{Color.RESET}")
 
         case 3:
             vendedor = _input_int("Ingrese id del vendedor: ")
-            for nueva_reserva in lista_reservas:
-                if nueva_reserva["id_vendedor"] == vendedor:
-                    print(nueva_reserva)
-                    return
-            print("No se encontró una reserva para el vendedor especificado.")
-            return
-
+            encontrado = False
+            for reserva in lista_reservas:
+                if reserva["id_vendedor"] == vendedor:
+                    print("-" * 20)
+                    print(f"ID Reserva: {reserva['id']} | Auto: {reserva['id_auto']} | Estado: {reserva['estado']}")
+                    encontrado = True
+            
+            if not encontrado:
+                print(f"{Color.ROJO}No se encontró ninguna reserva para el vendedor especificado.{Color.RESET}")
 
 # funcion para concretar ventas
 def concretar_venta(lista_reservas):
@@ -130,6 +136,9 @@ def concretar_venta(lista_reservas):
                     nueva_reserva["monto_sena"] += _input_int("Ingresar monto a saldar: ")
                     nueva_reserva["estado"] = ESTADO_RESERVA_VENTA
                     print("¡Venta concretada y monto actualizado exitosamente!")
+                    return
+            print("No se encontró una reserva para el auto especificado.")
+            return
 
         case 2:
             cliente = _input_int("Ingrese cliente: ")
@@ -138,6 +147,9 @@ def concretar_venta(lista_reservas):
                     nueva_reserva["monto_sena"] += _input_int("Ingresar monto a saldar: ")
                     nueva_reserva["estado"] = ESTADO_RESERVA_VENTA
                     print("¡Venta concretada y monto actualizado exitosamente!")
+                    return
+            print("No se encontró una reserva para el cliente especificado.")
+            return
 
         case 3:
             vendedor = _input_int("Ingrese vendedor: ")
@@ -146,6 +158,9 @@ def concretar_venta(lista_reservas):
                     nueva_reserva["monto_sena"] += _input_int("Ingresar monto a saldar: ")
                     nueva_reserva["estado"] = ESTADO_RESERVA_VENTA
                     print("¡Venta concretada y monto actualizado exitosamente!")
+                    return
+            print("No se encontró una reserva para el vendedor especificado.")
+            return
 
 
 # funcion para cancelar reservas
@@ -160,22 +175,30 @@ def cancelar_reserva(lista_reservas):
         case 1:
             auto = _input_int("Ingrese id del auto: ")
             for nueva_reserva in lista_reservas:
-                if nueva_reserva["auto"] == auto:
+                if nueva_reserva["id_auto"] == auto:
                     nueva_reserva["estado"] = ESTADO_RESERVA_CANCELADA
                     print("¡Reserva cancelada exitosamente!")
+                    return
+            print("No se encontró una reserva para el auto especificado.")
+            return
         case 2:
             cliente = _input_int("Ingrese id del cliente: ")
             for nueva_reserva in lista_reservas:
-                if nueva_reserva["cliente"] == cliente:
+                if nueva_reserva["id_cliente"] == cliente:
                     nueva_reserva["estado"] = ESTADO_RESERVA_CANCELADA
                     print("¡Reserva cancelada exitosamente!")
-
+                    return
+            print("No se encontró una reserva para el cliente especificado.")
+            return
         case 3:
             vendedor = _input_int("Ingrese id del vendedor: ")
             for nueva_reserva in lista_reservas:
-                if nueva_reserva["vendedor"] == vendedor:
+                if nueva_reserva["id_vendedor"] == vendedor:
                     nueva_reserva["estado"] = ESTADO_RESERVA_CANCELADA
                     print("¡Reserva cancelada exitosamente!")
+                    return
+            print("No se encontró una reserva para el vendedor especificado.")
+            return
 
 
 def main_reservas():
@@ -187,7 +210,7 @@ def main_reservas():
 
     opcion = -1
 
-    while opcion != 0:
+    while opcion != 9:
         print("\n")
         # Pintamos el título principal de color Cyan
         print(f"{Color.CYAN}=== RESERVAS ==={Color.RESET}")
@@ -198,7 +221,7 @@ def main_reservas():
         print(f"{Color.AZUL}3.{Color.RESET} Buscar reservas ")
         print(f"{Color.AZUL}4.{Color.RESET} Concretar venta ")
         print(f"{Color.AZUL}5.{Color.RESET} Cancelar reserva")
-        print(f"{Color.ROJO}0.{Color.RESET} Salir")
+        print(f"{Color.ROJO}9.{Color.RESET} Volver al menú principal")
 
         print(f"{Color.AMARILLO}Elegi una opcion:{Color.RESET}")
         opcion = _input_int("Seleccione una opcion: ")
@@ -215,7 +238,7 @@ def main_reservas():
             case 5:
                 cancelar_reserva(lista_reservas)
 
-            case 0:
+            case 9:
                 print(f"\n{Color.VERDE}*Usted salio del programa*{Color.RESET}")
                 break
             case _:  # como el default: en c
