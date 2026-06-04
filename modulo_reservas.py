@@ -75,7 +75,6 @@ def listar_reservas_activas(lista_reservas):
 
 
 # funcion para buscar reservas
-# funcion para buscar reservas
 def buscar_reservas(lista_reservas):
 
     print("1. Buscar por id de auto")
@@ -177,46 +176,55 @@ def cancelar_reserva(lista_reservas):
             auto = _input_int("Ingrese id del auto: ")
             for nueva_reserva in lista_reservas:
                 if nueva_reserva["id_auto"] == auto:
-                    nueva_reserva["estado"] = ESTADO_RESERVA_CANCELADA
-                    print("¡Reserva cancelada exitosamente!")
+                    confirmar = input("¿Seguro que quieres cancelar esta reserva? (s/n): ").strip().lower()
+                    if confirmar == 's':
+                        nueva_reserva["estado"] = ESTADO_RESERVA_CANCELADA
+                        print(f"{Color.VERDE}¡Reserva cancelada exitosamente!{Color.RESET}")
+                    else:
+                        print("Operación abortada. La reserva sigue activa.")
                     return
-            print("No se encontró una reserva para el auto especificado.")
+            print(f"{Color.ROJO}No se encontró una reserva para el auto especificado.{Color.RESET}")
             return
         case 2:
             cliente = _input_int("Ingrese id del cliente: ")
             for nueva_reserva in lista_reservas:
                 if nueva_reserva["id_cliente"] == cliente:
-                    nueva_reserva["estado"] = ESTADO_RESERVA_CANCELADA
-                    print("¡Reserva cancelada exitosamente!")
+                    confirmar = input("¿Seguro que quieres cancelar esta reserva? (s/n): ").strip().lower()
+                    if confirmar == 's':
+                        nueva_reserva["estado"] = ESTADO_RESERVA_CANCELADA
+                        print(f"{Color.VERDE}¡Reserva cancelada exitosamente!{Color.RESET}")
+                    else:
+                        print("Operación abortada. La reserva sigue activa.")
                     return
-            print("No se encontró una reserva para el cliente especificado.")
+            print(f"{Color.ROJO}No se encontró una reserva para el cliente especificado.{Color.RESET}")
             return
         case 3:
             vendedor = _input_int("Ingrese id del vendedor: ")
             for nueva_reserva in lista_reservas:
                 if nueva_reserva["id_vendedor"] == vendedor:
-                    nueva_reserva["estado"] = ESTADO_RESERVA_CANCELADA
-                    print("¡Reserva cancelada exitosamente!")
+                    confirmar = input("¿Seguro que quieres cancelar esta reserva? (s/n): ").strip().lower()
+                    if confirmar == 's':
+                        nueva_reserva["estado"] = ESTADO_RESERVA_CANCELADA
+                        print(f"{Color.VERDE}¡Reserva cancelada exitosamente!{Color.RESET}")
+                    else:
+                        print("Operación abortada. La reserva sigue activa.")
                     return
-            print("No se encontró una reserva para el vendedor especificado.")
+            print(f"{Color.ROJO}No se encontró una reserva para el vendedor especificado.{Color.RESET}")
             return
 
 
 def main_reservas():
-    # lista
+
     lista_reservas = []
 
-    # Verificar y actualizar vencimientos de reservas al iniciar el programa
     verificar_y_actualizar_vencimientos(lista_reservas)
 
     opcion = -1
 
     while opcion != 9:
         print("\n")
-        # Pintamos el título principal de color Cyan
         print(f"{Color.CYAN}=== RESERVAS ==={Color.RESET}")
 
-        # Pintamos los números de las opciones en Azul para que resalten
         print(f"{Color.AZUL}1.{Color.RESET} Registrar una nueva reserva ")
         print(f"{Color.AZUL}2.{Color.RESET} Listar reservas activas ")
         print(f"{Color.AZUL}3.{Color.RESET} Buscar reservas ")
@@ -243,7 +251,6 @@ def main_reservas():
                 print(f"\n{Color.VERDE}*Usted salio del programa*{Color.RESET}")
                 break
             case _:  # como el default: en c
-                # Mensaje de error en Rojo
                 print(f"{Color.ROJO}Opción inválida, vuelve a intentarlo{Color.RESET}")
 
 
