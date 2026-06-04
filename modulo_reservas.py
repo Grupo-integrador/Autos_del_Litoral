@@ -31,9 +31,9 @@ def registrar_nueva_reserva(lista_reservas):
         "id_auto": auto,  # 12
         "id_cliente": cliente,  # 7
         "id_vendedor": vendedor,  # 2
-        "fecha_reserva": momento_actual,  # date(2026, 4, 25)
+        "fecha_reserva": momento_actual.isoformat(),  # "2026-06-04"
         "monto_sena": monto_reserva,  # 400000
-        "fecha_limite": momento_limite,  # date(2026, 4, 25)
+        "fecha_limite": momento_limite.isoformat(),  # "2026-06-04"
         "estado": ESTADO_RESERVA_ACTIVA,
     }
 
@@ -48,7 +48,8 @@ def verificar_y_actualizar_vencimientos(lista_reservas):
     fecha_actual = date.today()
     for reserva in lista_reservas:
         if reserva["estado"] == ESTADO_RESERVA_ACTIVA:
-            if fecha_actual > reserva["fecha_limite"]:
+            fecha_limite = date.fromisoformat(reserva["fecha_limite"])
+            if fecha_actual > fecha_limite:
                 reserva["estado"] = ESTADO_RESERVA_CANCELADA
 
 #funcion para mostrar las reservas activas
