@@ -1,3 +1,6 @@
+import os
+
+
 # Funcion para validar entrada de tipo int
 def _input_int(mensaje):
     while True:
@@ -9,6 +12,26 @@ def _input_int(mensaje):
             print(" ⚠️  Ingrese un número válido.")
 
 
+# Funcion para validar entrada de tipo str
+def _input_str(mensaje):
+    while True:
+        try:
+            value = str(input(mensaje))
+            if not value:  # Si la entrada está vacía, lanza una excepción
+                raise ValueError(
+                    "La entrada no puede estar vacía."
+                )  # El raise lanza la excepción
+            return value
+        except ValueError as e:  # Atrapa la excepción ValueError
+            print(f" ⚠️  {e}")
+
+
+# Funcion para limpiar la consola
+def _limpiar_pantalla():
+    # Si el sistema es Windows, usa "cls", de lo contrario usa "clear"
+    os.system("cls" if os.name == "nt" else "clear")
+
+
 # Declaro los colores
 class Color:
     ROJO = "\033[91m"
@@ -17,4 +40,3 @@ class Color:
     AZUL = "\033[94m"
     CYAN = "\033[96m"
     RESET = "\033[0m"
-
