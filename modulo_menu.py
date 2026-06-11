@@ -2,12 +2,13 @@ from modulo_autos import main_concesionaria
 from modulo_clientes import menu_clientes
 from modulo_reservas import main_reservas
 from modulo_ventas import menu_ventas
-from utils.validateUtils import _input_int
+from utils.validateUtils import _input_int, _limpiar_pantalla
 
 
 def menu_principal():
 
     while True:
+        _limpiar_pantalla()
         print("""
     ═══════════════════════════════════════════════════
     🚗 AUTOS DEL LITORAL — Sistema v1.0
