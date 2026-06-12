@@ -9,18 +9,30 @@ ESTADO_RESERVA_CANCELADA = "cancelada"
 
 
 # funcion para agregar reservas mediante un diccionario a la lista de reservas
-def registrar_nueva_reserva(lista_reservas):
+def registrar_nueva_reserva(lista_reservas, lista_autos):
     print("--- NUEVA RESERVA ---")
 
-    auto = _input_int("Ingresar id del auto: ")
+    auto_id = _input_int("Ingresar id del auto: ")
+    auto_encontrado = None
+    for a in lista_autos:
+        if a["id"] == auto_id:
+            auto_encontrado = a
+            break
+
+    if not auto_encontrado:
+        print(f"{Color.ROJO}No se encontró ningún auto con el ID especificado.{Color.RESET}")
+        return
+
+    if auto_encontrado["estado"] != "disponible":
+        print(f"{Color.ROJO}El auto no está disponible para reserva (estado actual: {auto_encontrado['estado']}).{Color.RESET}")
+        return
+
     cliente = _input_int("Ingresar id del cliente: ")
     vendedor = _input_int("Ingresar id del vendedor: ")
     monto_reserva = _input_int("Ingresar monto_reserva: ")
     
-    
     momento_actual = date.today()
     momento_limite = momento_actual + timedelta(days=30)  # fecha limite
-
 
     id = 1 
     if len(lista_reservas) > 0:
@@ -29,7 +41,7 @@ def registrar_nueva_reserva(lista_reservas):
 
     nueva_reserva = {
         "id": id, # 1
-        "id_auto": auto,  # 12
+        "id_auto": auto_id,  # 12
         "id_cliente": cliente,  # 7
         "id_vendedor": vendedor,  # 2
         "fecha_reserva": momento_actual,  # "2026-06-04"
@@ -38,6 +50,8 @@ def registrar_nueva_reserva(lista_reservas):
         "estado": ESTADO_RESERVA_ACTIVA,
     }
 
+    # Cambiamos el estado del auto a reservado
+    auto_encontrado["estado"] = "reservado"
     lista_reservas.append(nueva_reserva)
 
     # como lo pide la documentacion
@@ -45,13 +59,18 @@ def registrar_nueva_reserva(lista_reservas):
     print(f"¡Reserva guardada! Vence el: {fecha_limite_texto}")
 
 #funcion para verificar y actualizar reservas vencidas
-def verificar_y_actualizar_vencimientos(lista_reservas):
+def verificar_y_actualizar_vencimientos(lista_reservas, lista_autos):
     fecha_actual = date.today()
     for reserva in lista_reservas:
         if reserva["estado"] == ESTADO_RESERVA_ACTIVA:
             fecha_limite = reserva["fecha_limite"]
             if fecha_actual > fecha_limite:
                 reserva["estado"] = ESTADO_RESERVA_CANCELADA
+                # Devolvemos el auto a disponible
+                for a in lista_autos:
+                    if a["id"] == reserva["id_auto"]:
+                        a["estado"] = "disponible"
+                        break
 
 #funcion para mostrar las reservas activas
 def listar_reservas_activas(lista_reservas):
@@ -125,53 +144,88 @@ def buscar_reservas(lista_reservas):
                 print(f"{Color.ROJO}No se encontró ninguna reserva para el vendedor especificado.{Color.RESET}")
 
 # funcion para concretar ventas
-def concretar_venta(lista_reservas):
+def concretar_venta(lista_reservas, lista_autos, lista_ventas):
     print("1. Concretar venta por id de auto")
     print("2. Concretar venta por id de cliente")
     print("3. Concretar venta por id de vendedor")
 
     opcion = _input_int("Opcion: ")
+    reserva_a_concretar = None
 
     match opcion:
         case 1:
             auto = _input_int("Ingrese auto: ")
             for nueva_reserva in lista_reservas:
-                if nueva_reserva["id_auto"] == auto:
-                    nueva_reserva["monto_sena"] += _input_int("Ingresar monto a saldar: ")
-                    nueva_reserva["estado"] = ESTADO_RESERVA_VENTA
-                    print("¡Venta concretada y monto actualizado exitosamente!")
-                    return
-            print("No se encontró una reserva para el auto especificado.")
-            return
+                if nueva_reserva["id_auto"] == auto and nueva_reserva["estado"] == ESTADO_RESERVA_ACTIVA:
+                    reserva_a_concretar = nueva_reserva
+                    break
+            if not reserva_a_concretar:
+                print("No se encontró una reserva activa para el auto especificado.")
+                return
 
         case 2:
             cliente = _input_int("Ingrese cliente: ")
             for nueva_reserva in lista_reservas:
-                if nueva_reserva["id_cliente"] == cliente:
-                    nueva_reserva["monto_sena"] += _input_int("Ingresar monto a saldar: ")
-                    nueva_reserva["estado"] = ESTADO_RESERVA_VENTA
-                    print("¡Venta concretada y monto actualizado exitosamente!")
-                    return
-            print("No se encontró una reserva para el cliente especificado.")
-            return
+                if nueva_reserva["id_cliente"] == cliente and nueva_reserva["estado"] == ESTADO_RESERVA_ACTIVA:
+                    reserva_a_concretar = nueva_reserva
+                    break
+            if not reserva_a_concretar:
+                print("No se encontró una reserva activa para el cliente especificado.")
+                return
 
         case 3:
             vendedor = _input_int("Ingrese vendedor: ")
             for nueva_reserva in lista_reservas:
-                if nueva_reserva["id_vendedor"] == vendedor:
-                    nueva_reserva["monto_sena"] += _input_int("Ingresar monto a saldar: ")
-                    nueva_reserva["estado"] = ESTADO_RESERVA_VENTA
-                    print("¡Venta concretada y monto actualizado exitosamente!")
-                    return
-            print("No se encontró una reserva para el vendedor especificado.")
+                if nueva_reserva["id_vendedor"] == vendedor and nueva_reserva["estado"] == ESTADO_RESERVA_ACTIVA:
+                    reserva_a_concretar = nueva_reserva
+                    break
+            if not reserva_a_concretar:
+                print("No se encontró una reserva activa para el vendedor especificado.")
+                return
+        case _:
+            print("Opción inválida.")
             return
+
+    # Si se encontró la reserva, procedemos
+    monto_saldar = _input_int("Ingresar monto a saldar: ")
+    reserva_a_concretar["monto_sena"] += monto_saldar
+    reserva_a_concretar["estado"] = ESTADO_RESERVA_VENTA
+
+    # Actualizar estado del auto a "vendido"
+    auto_encontrado = None
+    for a in lista_autos:
+        if a["id"] == reserva_a_concretar["id_auto"]:
+            a["estado"] = "vendido"
+            auto_encontrado = a
+            break
+
+    # Crear el diccionario de Venta
+    id_venta = 1
+    if len(lista_ventas) > 0:
+        id_venta = lista_ventas[-1]["id"] + 1
+
+    forma_pago = input("Ingrese forma de pago (contado/financiado/parte de pago con otro auto): ").strip()
+    estado_pago = input("Ingrese estado de pago (cobrado/pendiente/en cuotas): ").strip()
+
+    nueva_venta = {
+        "id": id_venta,
+        "id_auto": reserva_a_concretar["id_auto"],
+        "id_cliente": reserva_a_concretar["id_cliente"],
+        "id_vendedor": reserva_a_concretar["id_vendedor"],
+        "fecha_venta": date.today().isoformat(),
+        "precio_final": reserva_a_concretar["monto_sena"],  # seña + monto a saldar
+        "forma_pago": forma_pago,
+        "estado_pago": estado_pago
+    }
+    lista_ventas.append(nueva_venta)
+    print("¡Venta concretada, estado del auto actualizado a 'vendido' y registro de venta creado exitosamente!")
 
 
 # funcion para cancelar reservas
-def cancelar_reserva(lista_reservas):
-    print("1. Cancelar venta por id de auto")
-    print("2. Cancelar venta por id de cliente")
-    print("3. Cancelar venta por id de vendedor")
+def cancelar_reserva(lista_reservas, lista_autos):
+    print("1. Cancelar reserva por id de auto")
+    print("2. Cancelar reserva por id de cliente")
+    print("3. Cancelar reserva por id de vendedor")
 
     opcion = _input_int("Opcion: ")
 
@@ -183,11 +237,16 @@ def cancelar_reserva(lista_reservas):
                     confirmar = input("¿Seguro que quieres cancelar esta reserva? (s/n): ").strip().lower()
                     if confirmar == 's':
                         nueva_reserva["estado"] = ESTADO_RESERVA_CANCELADA
+                        # Devolver el auto a disponible
+                        for a in lista_autos:
+                            if a["id"] == nueva_reserva["id_auto"]:
+                                a["estado"] = "disponible"
+                                break
                         print(f"{Color.VERDE}¡Reserva cancelada exitosamente!{Color.RESET}")
                     else:
                         print("Operación abortada. La reserva sigue activa.")
                     return
-            print(f"{Color.ROJO}No se encontró una reserva para el auto especificado.{Color.RESET}")
+            print(f"{Color.ROJO}No se encontró una reserva activa para el auto especificado.{Color.RESET}")
             return
         case 2:
             cliente = _input_int("Ingrese id del cliente: ")
@@ -196,11 +255,16 @@ def cancelar_reserva(lista_reservas):
                     confirmar = input("¿Seguro que quieres cancelar esta reserva? (s/n): ").strip().lower()
                     if confirmar == 's':
                         nueva_reserva["estado"] = ESTADO_RESERVA_CANCELADA
+                        # Devolver el auto a disponible
+                        for a in lista_autos:
+                            if a["id"] == nueva_reserva["id_auto"]:
+                                a["estado"] = "disponible"
+                                break
                         print(f"{Color.VERDE}¡Reserva cancelada exitosamente!{Color.RESET}")
                     else:
                         print("Operación abortada. La reserva sigue activa.")
                     return
-            print(f"{Color.ROJO}No se encontró una reserva para el cliente especificado.{Color.RESET}")
+            print(f"{Color.ROJO}No se encontró una reserva activa para el cliente especificado.{Color.RESET}")
             return
         case 3:
             vendedor = _input_int("Ingrese id del vendedor: ")
@@ -209,11 +273,16 @@ def cancelar_reserva(lista_reservas):
                     confirmar = input("¿Seguro que quieres cancelar esta reserva? (s/n): ").strip().lower()
                     if confirmar == 's':
                         nueva_reserva["estado"] = ESTADO_RESERVA_CANCELADA
+                        # Devolver el auto a disponible
+                        for a in lista_autos:
+                            if a["id"] == nueva_reserva["id_auto"]:
+                                a["estado"] = "disponible"
+                                break
                         print(f"{Color.VERDE}¡Reserva cancelada exitosamente!{Color.RESET}")
                     else:
                         print("Operación abortada. La reserva sigue activa.")
                     return
-            print(f"{Color.ROJO}No se encontró una reserva para el vendedor especificado.{Color.RESET}")
+            print(f"{Color.ROJO}No se encontró una reserva activa para el vendedor especificado.{Color.RESET}")
             return
 
 # Carga el JSON y convierte las fechas de texto a objetos date. Recorremos la lista y transformamos los strings a objetos date
@@ -223,15 +292,36 @@ def cargar_reservas_json(ruta_archivo):
         with open(ruta_archivo, 'r') as archivo:
             lista_reservas = json.load(archivo)
             
-            
             for reserva in lista_reservas:
                 reserva["fecha_reserva"] = date.fromisoformat(reserva["fecha_reserva"])
                 reserva["fecha_limite"] = date.fromisoformat(reserva["fecha_limite"])
                 
             return lista_reservas
 
-    except FileNotFoundError, json.JSONDecodeError:
+    except (FileNotFoundError, json.JSONDecodeError):
         return []
+
+def cargar_autos_json(ruta_archivo):
+    try:
+        with open(ruta_archivo, 'r', encoding='utf-8') as archivo:
+            return json.load(archivo)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return []
+
+def guardar_autos_json(lista_autos, ruta_archivo):
+    with open(ruta_archivo, 'w', encoding='utf-8') as archivo:
+        json.dump(lista_autos, archivo, indent=4)
+
+def cargar_ventas_json(ruta_archivo):
+    try:
+        with open(ruta_archivo, 'r', encoding='utf-8') as archivo:
+            return json.load(archivo)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return []
+
+def guardar_ventas_json(lista_ventas, ruta_archivo):
+    with open(ruta_archivo, 'w', encoding='utf-8') as archivo:
+        json.dump(lista_ventas, archivo, indent=4)
 
 # Hacemos una copia del diccionario para no romper los dates que están en memoria
 def guardar_reservas_json(lista_reservas, ruta_archivo):
@@ -251,16 +341,21 @@ def guardar_reservas_json(lista_reservas, ruta_archivo):
         json.dump(reservas_para_guardar, archivo, indent=4)
 
 def main_reservas():
-    ruta = "db/db_reservas.json"
-    lista_reservas = []
-    lista_reservas = cargar_reservas_json(ruta)
-    verificar_y_actualizar_vencimientos(lista_reservas)
-    guardar_reservas_json(lista_reservas, ruta)
+    ruta_reservas = "db/db_reservas.json"
+    ruta_autos = "db/db_autos.json"
+    ruta_ventas = "db/db_ventas.json"
+
+    lista_reservas = cargar_reservas_json(ruta_reservas)
+    lista_autos = cargar_autos_json(ruta_autos)
+    lista_ventas = cargar_ventas_json(ruta_ventas)
+
+    verificar_y_actualizar_vencimientos(lista_reservas, lista_autos)
+    guardar_reservas_json(lista_reservas, ruta_reservas)
+    guardar_autos_json(lista_autos, ruta_autos)
+
     opcion = -1
 
     while opcion != 9:
-
-        
         print("\n")
         print(f"{Color.CYAN}=== RESERVAS ==={Color.RESET}")
 
@@ -276,18 +371,22 @@ def main_reservas():
 
         match opcion:
             case 1:
-                registrar_nueva_reserva(lista_reservas)  # parametro
-                guardar_reservas_json(lista_reservas, ruta)
+                registrar_nueva_reserva(lista_reservas, lista_autos)
+                guardar_reservas_json(lista_reservas, ruta_reservas)
+                guardar_autos_json(lista_autos, ruta_autos)
             case 2:
                 listar_reservas_activas(lista_reservas)
             case 3:
                 buscar_reservas(lista_reservas)
             case 4:
-                concretar_venta(lista_reservas)
-                guardar_reservas_json(lista_reservas, ruta)
+                concretar_venta(lista_reservas, lista_autos, lista_ventas)
+                guardar_reservas_json(lista_reservas, ruta_reservas)
+                guardar_autos_json(lista_autos, ruta_autos)
+                guardar_ventas_json(lista_ventas, ruta_ventas)
             case 5:
-                cancelar_reserva(lista_reservas)
-                guardar_reservas_json(lista_reservas, ruta)
+                cancelar_reserva(lista_reservas, lista_autos)
+                guardar_reservas_json(lista_reservas, ruta_reservas)
+                guardar_autos_json(lista_autos, ruta_autos)
 
             case 9:
                 print(f"\n{Color.VERDE}*Usted salio del programa*{Color.RESET}")
