@@ -230,7 +230,7 @@ def cargar_reservas_json(ruta_archivo):
                 
             return lista_reservas
 
-    except FileNotFoundError:
+    except FileNotFoundError, json.JSONDecodeError:
         return []
 
 # Hacemos una copia del diccionario para no romper los dates que están en memoria
@@ -255,12 +255,12 @@ def main_reservas():
     lista_reservas = []
     lista_reservas = cargar_reservas_json(ruta)
     verificar_y_actualizar_vencimientos(lista_reservas)
-
+    guardar_reservas_json(lista_reservas, ruta)
     opcion = -1
 
     while opcion != 9:
 
-        guardar_reservas_json(lista_reservas, ruta)
+        
         print("\n")
         print(f"{Color.CYAN}=== RESERVAS ==={Color.RESET}")
 
@@ -277,14 +277,17 @@ def main_reservas():
         match opcion:
             case 1:
                 registrar_nueva_reserva(lista_reservas)  # parametro
+                guardar_reservas_json(lista_reservas, ruta)
             case 2:
                 listar_reservas_activas(lista_reservas)
             case 3:
                 buscar_reservas(lista_reservas)
             case 4:
                 concretar_venta(lista_reservas)
+                guardar_reservas_json(lista_reservas, ruta)
             case 5:
                 cancelar_reserva(lista_reservas)
+                guardar_reservas_json(lista_reservas, ruta)
 
             case 9:
                 print(f"\n{Color.VERDE}*Usted salio del programa*{Color.RESET}")
