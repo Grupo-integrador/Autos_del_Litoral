@@ -16,3 +16,24 @@ def _id_autoincremental(archivo):
 # Trae los datos del archivo
 # if (len(datos)) > 0 Verifica si hay datos
 # Si hay datos, devuelve el siguiente ID disponible, si no, devuelve 1
+
+
+# Buscar una venta por un campo específico (id_auto, id_cliente, id_vendedor)
+def _buscar_venta_por_id_modulo(id, archivo, id_modulo):
+    datos = _db_leer_datos(archivo)
+
+    # Recorremos la lista de datos y buscamos el ID especificado y retornamos el dato encontrado
+    for data_id in datos:
+        if data_id[id_modulo] == id:
+            return data_id
+
+    return None  # Retornamos None si no se encuentra ninguna venta con ese ID
+
+
+def _buscar_ventas_por_id_modulo(id, archivo, id_modulo):
+    datos = _db_leer_datos(archivo)
+    resultados = []
+    for data_id in datos:
+        if data_id[id_modulo] == id:
+            resultados.append(data_id)
+    return resultados if resultados else None
