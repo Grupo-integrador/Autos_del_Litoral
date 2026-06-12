@@ -1,3 +1,4 @@
+import json
 from datetime import date, timedelta
 from utils.validateUtils import _input_int, Color
 #from modulo_autos
@@ -31,9 +32,9 @@ def registrar_nueva_reserva(lista_reservas):
         "id_auto": auto,  # 12
         "id_cliente": cliente,  # 7
         "id_vendedor": vendedor,  # 2
-        "fecha_reserva": momento_actual.isoformat(),  # "2026-06-04"
+        "fecha_reserva": momento_actual,  # "2026-06-04"
         "monto_sena": monto_reserva,  # 400000
-        "fecha_limite": momento_limite.isoformat(),  # "2026-06-04"
+        "fecha_limite": momento_limite,  # "2026-06-04"
         "estado": ESTADO_RESERVA_ACTIVA,
     }
 
@@ -48,7 +49,7 @@ def verificar_y_actualizar_vencimientos(lista_reservas):
     fecha_actual = date.today()
     for reserva in lista_reservas:
         if reserva["estado"] == ESTADO_RESERVA_ACTIVA:
-            fecha_limite = date.fromisoformat(reserva["fecha_limite"])
+            fecha_limite = reserva["fecha_limite"]
             if fecha_actual > fecha_limite:
                 reserva["estado"] = ESTADO_RESERVA_CANCELADA
 
@@ -58,6 +59,7 @@ def listar_reservas_activas(lista_reservas):
         print("No hay reservas registradas")
         return
 
+    tiene_activas = False
     for nueva_reserva in lista_reservas:
         if nueva_reserva["estado"] == ESTADO_RESERVA_ACTIVA:
             print("-" * 20)
@@ -70,8 +72,10 @@ def listar_reservas_activas(lista_reservas):
             print(f"Fecha límite: {nueva_reserva['fecha_limite']}")
             print(f"Estado: {nueva_reserva['estado']}")
             print("-" * 20)
-        else:
-            print("No hay reservas activas")
+            tiene_activas = True
+    
+    if not tiene_activas:
+        print("No hay reservas activas")
 
 
 # funcion para buscar reservas
@@ -175,7 +179,7 @@ def cancelar_reserva(lista_reservas):
         case 1:
             auto = _input_int("Ingrese id del auto: ")
             for nueva_reserva in lista_reservas:
-                if nueva_reserva["id_auto"] == auto:
+                if nueva_reserva["id_auto"] == auto and nueva_reserva["estado"] == ESTADO_RESERVA_ACTIVA:
                     confirmar = input("¿Seguro que quieres cancelar esta reserva? (s/n): ").strip().lower()
                     if confirmar == 's':
                         nueva_reserva["estado"] = ESTADO_RESERVA_CANCELADA
@@ -188,7 +192,7 @@ def cancelar_reserva(lista_reservas):
         case 2:
             cliente = _input_int("Ingrese id del cliente: ")
             for nueva_reserva in lista_reservas:
-                if nueva_reserva["id_cliente"] == cliente:
+                if nueva_reserva["id_cliente"] == cliente and nueva_reserva["estado"] == ESTADO_RESERVA_ACTIVA:
                     confirmar = input("¿Seguro que quieres cancelar esta reserva? (s/n): ").strip().lower()
                     if confirmar == 's':
                         nueva_reserva["estado"] = ESTADO_RESERVA_CANCELADA
@@ -201,7 +205,7 @@ def cancelar_reserva(lista_reservas):
         case 3:
             vendedor = _input_int("Ingrese id del vendedor: ")
             for nueva_reserva in lista_reservas:
-                if nueva_reserva["id_vendedor"] == vendedor:
+                if nueva_reserva["id_vendedor"] == vendedor and nueva_reserva["estado"] == ESTADO_RESERVA_ACTIVA:
                     confirmar = input("¿Seguro que quieres cancelar esta reserva? (s/n): ").strip().lower()
                     if confirmar == 's':
                         nueva_reserva["estado"] = ESTADO_RESERVA_CANCELADA
@@ -212,16 +216,51 @@ def cancelar_reserva(lista_reservas):
             print(f"{Color.ROJO}No se encontró una reserva para el vendedor especificado.{Color.RESET}")
             return
 
+# Carga el JSON y convierte las fechas de texto a objetos date. Recorremos la lista y transformamos los strings a objetos date
+def cargar_reservas_json(ruta_archivo):
+  
+    try:
+        with open(ruta_archivo, 'r') as archivo:
+            lista_reservas = json.load(archivo)
+            
+            
+            for reserva in lista_reservas:
+                reserva["fecha_reserva"] = date.fromisoformat(reserva["fecha_reserva"])
+                reserva["fecha_limite"] = date.fromisoformat(reserva["fecha_limite"])
+                
+            return lista_reservas
+
+    except FileNotFoundError:
+        return []
+
+# Hacemos una copia del diccionario para no romper los dates que están en memoria
+def guardar_reservas_json(lista_reservas, ruta_archivo):
+ 
+    reservas_para_guardar = []
+    
+    for reserva in lista_reservas:
+        
+        reserva_copia = reserva.copy() # copy es reservada de Python
+        
+        reserva_copia["fecha_reserva"] = reserva["fecha_reserva"].isoformat()
+        reserva_copia["fecha_limite"] = reserva["fecha_limite"].isoformat()
+        
+        reservas_para_guardar.append(reserva_copia)
+
+    with open(ruta_archivo, 'w') as archivo:
+        json.dump(reservas_para_guardar, archivo, indent=4)
 
 def main_reservas():
-
+    ruta = "db/db_reservas.json"
     lista_reservas = []
-
+    lista_reservas = cargar_reservas_json(ruta)
     verificar_y_actualizar_vencimientos(lista_reservas)
 
     opcion = -1
 
     while opcion != 9:
+
+        guardar_reservas_json(lista_reservas, ruta)
         print("\n")
         print(f"{Color.CYAN}=== RESERVAS ==={Color.RESET}")
 
