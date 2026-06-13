@@ -16,7 +16,6 @@
 # • Forma de pago (contado, financiado, parte de pago con otro auto).
 # • Estado del pago (cobrado, pendiente, en cuotas).
 
-from calendar import c
 from datetime import date
 
 from utils.dbUtils import _db_inyectar_datos, _db_leer_datos
