@@ -40,3 +40,32 @@ def _db_leer_datos(archivo):
 
         # Retornamos el contenido parseado
         return contenido
+
+
+# Funcion para actualizar un dato en un archivo JSON, EJ: _db_actualizar_dato("db_ventas.json", id_venta, "estado_pago", "nuevo_estado")
+def _db_actualizar_dato(archivo, id, campo, valor):
+    contenido = _db_leer_datos(archivo)
+    for item in contenido:
+        if item["id"] == id:
+            item[campo] = valor  # Actualizamos el valor del campo
+            break
+
+    with open(archivo, "w", encoding="utf-8") as f:
+        f.write(
+            json.dumps(contenido, indent=4)
+        )  # Guardamos el contenido actualizado sobreescribiendo "contenido"
+
+
+# TODO: MEJORAR
+# Funcion para eliminar un valor en un archivo JSON, EJ: _db_eliminar_dato("db_ventas.json", id_venta)
+def _db_eliminar_valor(archivo, id):
+    contenido = _db_leer_datos(archivo)
+    for item in contenido:
+        if item["id"] == id:
+            contenido.remove(item)  # Eliminamos el item de la lista
+            break
+
+    with open(archivo, "w", encoding="utf-8") as f:
+        f.write(
+            json.dumps(contenido, indent=4)
+        )  # Guardamos el contenido actualizado sobreescribiendo "contenido"
