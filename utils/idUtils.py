@@ -30,9 +30,13 @@ def _buscar_venta_por_id_modulo(id, archivo, id_modulo):
     return None  # Retornamos None si no se encuentra ninguna venta con ese ID
 
 
+# Buscar ventas por un campo específico (id_auto, id_cliente, id_vendedor)
 def _buscar_ventas_por_id_modulo(id, archivo, id_modulo):
     datos = _db_leer_datos(archivo)
+
+    # Inicializamos una lista para almacenar los resultados
     resultados = []
+    # Recorremos la lista de datos y buscamos los IDs especificados y los agregamos a la lista de resultados
     for data_id in datos:
         if data_id[id_modulo] == id:
             resultados.append(data_id)

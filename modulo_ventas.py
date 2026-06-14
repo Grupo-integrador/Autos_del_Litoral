@@ -3,8 +3,8 @@
 # vendedor. Necesito:
 # • [x] Registrar una venta nueva (qué auto, qué cliente, qué vendedor, qué día, a qué precio).
 # • [x] Ver todas las ventas hechas.
-# • [] Buscar una venta por patente del auto, por DNI del cliente, o por vendedor.
-# • [] Modificar el estado del pago si se vendió en cuotas.
+# • [x] Buscar una venta por patente del auto, por DNI del cliente, o por vendedor.
+# • [x] Modificar el estado del pago si se vendió en cuotas.
 # • [] Eliminar una venta si se anula la operación (rara vez, pero pasa).
 # De cada venta quiero guardar:
 # • Un número (único).
@@ -16,16 +16,83 @@
 # • Forma de pago (contado, financiado, parte de pago con otro auto).
 # • Estado del pago (cobrado, pendiente, en cuotas).
 
-from calendar import c
 from datetime import date
 
-from utils.dbUtils import _db_inyectar_datos, _db_leer_datos
+from utils.dbUtils import (
+    _db_actualizar_dato,
+    _db_eliminar_valor,
+    _db_inyectar_datos,
+    _db_leer_datos,
+)
 from utils.idUtils import (
     _buscar_venta_por_id_modulo,
     _buscar_ventas_por_id_modulo,
     _id_autoincremental,
 )
 from utils.validateUtils import Color, _input_int, _input_str, _limpiar_pantalla
+
+# ====================================================
+#                       UTILIDADES
+# ====================================================
+
+
+# Función para seleccionar la forma de pago
+def _seleccionar_forma_pago():
+    print("""
+    Forma de pago:
+        1. Contado
+        2. Financiado
+        3. Parte de pago (con otro auto)
+            """)
+
+    opcion = _input_int("Seleccione una opcion ")
+
+    match opcion:
+        case 1:
+            return "contado"
+        case 2:
+            return "financiado"
+        case 3:
+            return "parte de pago con otro auto"
+        case _:
+            print("Opción no válida.")
+            return _seleccionar_forma_pago()
+
+
+# Función para seleccionar el estado del pago
+def _seleccionar_estado_pago():
+    print("""
+    Estado del pago:
+        1. Cobrado
+        2. Pendiente
+        3. En cuotas
+            """)
+
+    opcion = _input_int("Seleccione una opcion ")
+
+    match opcion:
+        case 1:
+            return "cobrado"
+        case 2:
+            return "pendiente"
+        case 3:
+            return "en cuotas"
+        case _:
+            print("Opción no válida.")
+            return _seleccionar_estado_pago()
+
+
+# Función para buscar un valor por su ID en un archivo
+def _buscar_por_id(archivo, id):
+    datos = _db_leer_datos(archivo)
+
+    for d in datos:
+        if d["id"] == id:
+            return d
+    return None
+
+
+# ====================================================
 
 
 # Registrar una venta nueva
@@ -56,15 +123,16 @@ def registrar_venta():
                 # Buscar en el modulo de Autos
                 # Buscar en el modulo de Clientes
                 # Buscar en el modulo de Vendedor
+                _limpiar_pantalla()
                 nueva_venta = {
                     "id": id_ventas,
                     "id_auto": _input_int("Agregue el ID del auto: "),
                     "id_cliente": _input_int("Agregue el ID del cliente: "),
                     "id_vendedor": _input_int("Agregue el ID del vendedor: "),
                     "fecha_venta": str(date.today()),
-                    "precio_final": f"${_input_int('Agregue el precio final: ')}",
-                    "forma_pago": input("Agregue la forma de pago: "),
-                    "estado_pago": input("Agregue el estado del pago: "),
+                    "precio_final": _input_int("Agregue el precio final: "),
+                    "forma_pago": _seleccionar_forma_pago(),
+                    "estado_pago": _seleccionar_estado_pago(),
                 }
                 _db_inyectar_datos("db/db_ventas.json", nueva_venta)
                 print("\nVenta registrada correctamente.")
@@ -109,7 +177,7 @@ def ventas():
     ID del cliente: {datos["id_cliente"]}
     ID del vendedor: {datos["id_vendedor"]}
     Fecha de venta: {datos["fecha_venta"]}
-    Precio final: {datos["precio_final"]}
+    Precio final: ${datos["precio_final"]}
     Forma de pago: {datos["forma_pago"]}
     Estado de pago: {datos["estado_pago"]}
     ----------------------------------------
@@ -282,12 +350,106 @@ def buscar_venta():
 
 # Modificar el estado del pago si se vendió en cuotas.
 def cambiar_estado_de_venta():
-    pass
+
+    opcion = -1
+    while opcion != 0:
+        _limpiar_pantalla()
+        print(f"""
+    ═══════════════════════════════════════════════════
+    💰 MODIFICAR ESTADO DE PAGO
+    ═══════════════════════════════════════════════════
+    {Color.AZUL}1. {Color.RESET}Cambiar estado de pago de una venta.
+    {Color.ROJO}0. {Color.RESET}Volver al menu de VENTAS.
+            """)
+
+        opcion = _input_int("Seleccione una opción: ")
+        match opcion:
+            case 1:
+                id_venta = _input_int("\nIngrese el ID de la venta: ")
+                venta = _buscar_por_id("db/db_ventas.json", id_venta)
+
+                if not venta:
+                    print("No se encontró una venta con ese ID.")
+                    input("\nPresione Enter para continuar...")
+                    return
+
+                print(f"""
+    Venta encontrada:
+    ----------------------------------------
+    ID:           {venta["id"]}
+    Auto:         {venta["id_auto"]}
+    Cliente:      {venta["id_cliente"]}
+    Vendedor:     {venta["id_vendedor"]}
+    Precio final: ${venta["precio_final"]}
+    Forma de pago:{venta["forma_pago"]}
+    Estado actual:{venta["estado_pago"]}
+    ----------------------------------------
+                 """)
+
+                print("¿Confirma que quiere modificar esta venta? (s/n): ", end="")
+                confirmacion = input().strip().lower()  # Confirmación del usuario
+
+                if confirmacion == "n":
+                    return
+                elif confirmacion != "s":
+                    print("\nOpción inválida.")
+                    input("\nPresione Enter para continuar...")
+                    return
+
+                venta["estado_pago"] = _seleccionar_estado_pago()
+
+                # Actualizar el estado de la venta en el archivo JSON
+                _db_actualizar_dato(
+                    "db/db_ventas.json",
+                    venta["id"],
+                    "estado_pago",
+                    venta["estado_pago"],
+                )  # Archivo, ID de la venta, campo a actualizar, nuevo valor
+
+                print("\nEstado de la venta actualizado correctamente.")
+                input("Presione Enter para continuar...")
+            case 0:
+                pass
+            case _:
+                print("\nOpción inválida.")
+                input("\nPresione Enter para continuar...")
 
 
 # Eliminar una venta si se anula la operación (rara vez, pero pasa).
 def eliminar_venta():
-    pass
+
+    opcion = -1
+    while opcion != 0:
+        _limpiar_pantalla()
+        print(f"""
+    ═══════════════════════════════════════════════════
+    💰 ELIMINAR VENTA
+    ═══════════════════════════════════════════════════
+    {Color.AZUL}1. {Color.RESET}Eliminar una venta.
+    {Color.ROJO}0. {Color.RESET}Volver al menu de VENTAS.
+            """)
+
+        opcion = _input_int("Seleccione una opción: ")
+
+        match opcion:
+            case 1:
+                id_venta = _input_int("Ingrese el ID de la venta a eliminar: ")
+
+                # Verificamos que exista la venta
+                # Si no existe, mostramos un mensaje de error y volvemos al menú
+                if not _buscar_por_id("db/db_ventas.json", id_venta):
+                    print("\nLa venta no existe.")
+                    input("Presione Enter para continuar...")
+                    pass
+                else:
+                    _db_eliminar_valor("db/db_ventas.json", id_venta)
+                    print("\nVenta eliminada correctamente.")
+                    input("Presione Enter para continuar...")
+            case 0:
+                pass
+            case _:
+                print("\nOpción inválida.")
+                input("\nPresione Enter para continuar...")
 
 
 # Menu principal de VENTAS
@@ -317,9 +479,9 @@ def menu_ventas():
             case 3:
                 buscar_venta()
             case 4:
-                print("Se modifico el estado del pago")
+                cambiar_estado_de_venta()
             case 5:
-                print("Se elimino una venta")
+                eliminar_venta()
             case 0:
                 print("")
             case _:
