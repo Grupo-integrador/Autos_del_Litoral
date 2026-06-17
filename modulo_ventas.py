@@ -5,7 +5,7 @@
 # • [x] Ver todas las ventas hechas.
 # • [x] Buscar una venta por patente del auto, por DNI del cliente, o por vendedor.
 # • [x] Modificar el estado del pago si se vendió en cuotas.
-# • [] Eliminar una venta si se anula la operación (rara vez, pero pasa).
+# • [x] Eliminar una venta si se anula la operación (rara vez, pero pasa).
 # De cada venta quiero guardar:
 # • Un número (único).
 # • A qué auto corresponde.
@@ -18,6 +18,7 @@
 
 from datetime import date
 
+from modulo_autos import cambiar_estado_auto
 from utils.dbUtils import (
     _db_actualizar_dato,
     _db_eliminar_valor,
@@ -25,6 +26,8 @@ from utils.dbUtils import (
     _db_leer_datos,
 )
 from utils.idUtils import (
+    _buscar_por_id,
+    _buscar_por_id_validado,
     _buscar_venta_por_id_modulo,
     _buscar_ventas_por_id_modulo,
     _id_autoincremental,
@@ -82,25 +85,11 @@ def _seleccionar_estado_pago():
             return _seleccionar_estado_pago()
 
 
-# Función para buscar un valor por su ID en un archivo
-def _buscar_por_id(archivo, id):
-    datos = _db_leer_datos(archivo)
-
-    for d in datos:
-        if d["id"] == id:
-            return d
-    return None
-
-
 # ====================================================
 
 
 # Registrar una venta nueva
 def registrar_venta(id_auto=None, id_cliente=None, id_vendedor=None, precio_final=None):
-    # TODO:
-    # ⚠️ Importante: cuando se registra una venta, el auto tiene que pasar automáticamente a
-    # estado "vendido". Yo no me tengo que acordar de cambiarlo. (Resuelto: ahora actualiza db_autos.json)
-
     # Si se llama con argumentos (ej. desde concretar_venta), se registra directamente sin menú
     if id_auto is not None:
         id_ventas = _id_autoincremental("db/db_ventas.json")
@@ -109,10 +98,16 @@ def registrar_venta(id_auto=None, id_cliente=None, id_vendedor=None, precio_fina
         nueva_venta = {
             "id": id_ventas,
             "id_auto": id_auto,
-            "id_cliente": id_cliente if id_cliente is not None else _input_int("Agregue el ID del cliente: "),
-            "id_vendedor": id_vendedor if id_vendedor is not None else _input_int("Agregue el ID del vendedor: "),
+            "id_cliente": id_cliente
+            if id_cliente is not None
+            else _input_int("Agregue el ID del cliente: "),
+            "id_vendedor": id_vendedor
+            if id_vendedor is not None
+            else _input_int("Agregue el ID del vendedor: "),
             "fecha_venta": str(date.today()),
-            "precio_final": precio_final if precio_final is not None else _input_int("Agregue el precio final: "),
+            "precio_final": precio_final
+            if precio_final is not None
+            else _input_int("Agregue el precio final: "),
             "forma_pago": _seleccionar_forma_pago(),
             "estado_pago": _seleccionar_estado_pago(),
         }
@@ -124,6 +119,7 @@ def registrar_venta(id_auto=None, id_cliente=None, id_vendedor=None, precio_fina
 
     opcion = -1
     venta_registrada = None
+
     while opcion != 0:
         _limpiar_pantalla()
         print(f"""
@@ -138,19 +134,34 @@ def registrar_venta(id_auto=None, id_cliente=None, id_vendedor=None, precio_fina
         match opcion:
             case 1:
                 id_ventas = _id_autoincremental("db/db_ventas.json")
+
                 _limpiar_pantalla()
                 nueva_venta = {
                     "id": id_ventas,
-                    "id_auto": _input_int("Agregue el ID del auto: "),
-                    "id_cliente": _input_int("Agregue el ID del cliente: "),
-                    "id_vendedor": _input_int("Agregue el ID del vendedor: "),
+                    #
+                    "id_auto": _buscar_por_id_validado(
+                        "db/db_autos.json", "Agregue el ID del auto: "
+                    )["id"],
+                    #
+                    "id_cliente": _buscar_por_id_validado(
+                        "db/db_clientes.json", "Agregue el ID del cliente: "
+                    )["id"],
+                    #
+                    "id_vendedor": _buscar_por_id_validado(
+                        "db/db_vendedores.json", "Agregue el ID del vendedor: "
+                    )["id"],
+                    #
                     "fecha_venta": str(date.today()),
+                    #
                     "precio_final": _input_int("Agregue el precio final: "),
+                    #
                     "forma_pago": _seleccionar_forma_pago(),
                     "estado_pago": _seleccionar_estado_pago(),
                 }
+                # Se inyectan los datos en la base de ventas
                 _db_inyectar_datos("db/db_ventas.json", nueva_venta)
-                _db_actualizar_dato("db/db_autos.json", nueva_venta["id_auto"], "estado", "vendido")
+                # Luego se cambia el estado del auto a "vendido"
+                cambiar_estado_auto(nueva_venta["id_auto"], "vendido")
                 print("\nVenta registrada correctamente.")
                 venta_registrada = nueva_venta
                 input("\nPresione Enter para continuar...")
@@ -160,7 +171,7 @@ def registrar_venta(id_auto=None, id_cliente=None, id_vendedor=None, precio_fina
             case _:
                 print("Opción no válida.")
                 input("\nPresione Enter para continuar...")
-                
+
     return venta_registrada
 
 

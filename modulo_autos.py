@@ -2,9 +2,16 @@
 import json
 from datetime import date
 
+from utils.dbUtils import (
+    _db_actualizar_dato,
+)
+from utils.idUtils import _buscar_por_id
+from utils.validateUtils import _input_int
+
 # print("=== EL PROGRAMA ESTA ARRANCANDO CORRECTAMENTE ===")
 
 RUTA_DB_AUTOS = "db/db_autos.json"
+
 
 def cargar_autos():
     try:
@@ -13,9 +20,11 @@ def cargar_autos():
     except (FileNotFoundError, json.JSONDecodeError):
         return []
 
+
 def guardar_autos(lista):
     with open(RUTA_DB_AUTOS, "w", encoding="utf-8") as archivo:
         json.dump(lista, archivo, indent=4)
+
 
 lista_autos = []
 siguiente_id_auto = 1
@@ -115,9 +124,12 @@ def buscar_auto():
     opcion = input("Opcion: ")
     if opcion == "1":
         id_buscar = pedir_entero("ID: ")
-        for auto in lista_autos:
-            if auto["id"] == id_buscar:
-                return auto
+        auto = _buscar_por_id("db/db_autos.json", id_buscar)
+        if auto is not None:
+            return auto
+        else:
+            print(f"No existe auto con ID {id_buscar}.")
+            return None
     elif opcion == "2":
         patente_buscar = input("Patente: ").upper().strip()
         for auto in lista_autos:
@@ -126,15 +138,23 @@ def buscar_auto():
     return None
 
 
-def cambiar_estado_auto():
-    auto = buscar_auto()
-    if auto is None:
+# Cambia el estado de un auto por su ID. Si no se proporciona un nuevo valor, se pide al usuario.
+def cambiar_estado_auto(id_auto=None, nuevo_valor=None):
+    # Verificamos si el ID del auto viene por parametros o se pide al usuario
+    if id_auto is None:
+        id_auto = _input_int("ID: ")
+
+    # Busca el auto en la base de datos
+    auto = _buscar_por_id("db/db_autos.json", id_auto)
+
+    # Si el nuevo valor no viene por parametro, se pide al usuario que lo ingrese y luego se actualiza
+    if auto is not None:
+        print(f"Estado actual: {auto['estado']}")
+        auto["estado"] = pedir_estado_valido()
+        _db_actualizar_dato("db/db_autos.json", id_auto, "estado", auto["estado"])
+        print("Estado actualizado.")
+    else:
         print("No existe.")
-        return
-    print(f"Estado actual: {auto['estado']}")
-    auto["estado"] = pedir_estado_valido()
-    guardar_autos(lista_autos)
-    print("Estado actualizado.")
 
 
 def dar_de_baja_auto():

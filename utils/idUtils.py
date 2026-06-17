@@ -1,4 +1,5 @@
 from utils.dbUtils import _db_leer_datos
+from utils.validateUtils import _input_int
 
 
 def _id_autoincremental(archivo):
@@ -41,3 +42,23 @@ def _buscar_ventas_por_id_modulo(id, archivo, id_modulo):
         if data_id[id_modulo] == id:
             resultados.append(data_id)
     return resultados if resultados else None
+
+
+# Función para buscar un valor por su ID en un archivo
+def _buscar_por_id(archivo, id):
+    datos = _db_leer_datos(archivo)
+
+    for d in datos:
+        if d["id"] == id:
+            return d
+    return None
+
+
+# Función para buscar un registro por ID y validar su existencia
+def _buscar_por_id_validado(archivo, mensaje):
+    while True:
+        id_ingresado = _input_int(mensaje)
+        resultado = _buscar_por_id(archivo, id_ingresado)
+        if resultado is not None:
+            return resultado
+        print(f"El ID {id_ingresado} no se encontró. Intentá de nuevo.")

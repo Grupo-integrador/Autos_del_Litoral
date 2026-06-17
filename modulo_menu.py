@@ -1,8 +1,8 @@
 from modulo_autos import menu_autos
 from modulo_clientes import menu_clientes
 from modulo_reservas import main_reservas
-from modulo_ventas import menu_ventas
 from modulo_vendedores import menu_vendedores
+from modulo_ventas import menu_ventas
 from utils.validateUtils import _input_int, _limpiar_pantalla
 
 
