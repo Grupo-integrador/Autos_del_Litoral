@@ -1,122 +1,122 @@
 [
-    {
-        "id": 1,
-        "id_auto": 3,
-        "id_cliente": 1,
-        "id_vendedor": 2,
-        "fecha_venta": "2026-05-02",
-        "precio_final": 12400000,
-        "forma_pago": "financiado",
-        "estado_pago": "cobrado"
-    },
-    {
-        "id": 2,
-        "id_auto": 9,
-        "id_cliente": 4,
-        "id_vendedor": 1,
-        "fecha_venta": "2026-05-10",
-        "precio_final": 15800000,
-        "forma_pago": "contado",
-        "estado_pago": "cobrado"
-    },
-    {
-        "id": 3,
-        "id_auto": 1,
-        "id_cliente": 7,
-        "id_vendedor": 3,
-        "fecha_venta": "2026-05-15",
-        "precio_final": 18000000,
-        "forma_pago": "parte de pago con otro auto",
-        "estado_pago": "cobrado"
-    },
-    {
-        "id": 4,
-        "id_auto": 4,
-        "id_cliente": 2,
-        "id_vendedor": 4,
-        "fecha_venta": "2026-05-18",
-        "precio_final": 15000000,
-        "forma_pago": "financiado",
-        "estado_pago": "pendiente"
-    },
-    {
-        "id": 5,
-        "id_auto": 6,
-        "id_cliente": 5,
-        "id_vendedor": 8,
-        "fecha_venta": "2026-05-22",
-        "precio_final": 14200000,
-        "forma_pago": "contado",
-        "estado_pago": "pendiente"
-    },
-    {
-        "id": 6,
-        "id_auto": 8,
-        "id_cliente": 10,
-        "id_vendedor": 6,
-        "fecha_venta": "2026-05-27",
-        "precio_final": 19300000,
-        "forma_pago": "financiado",
-        "estado_pago": "cobrado"
-    },
-    {
-        "id": 7,
-        "id_auto": 10,
-        "id_cliente": 3,
-        "id_vendedor": 2,
-        "fecha_venta": "2026-06-01",
-        "precio_final": 11900000,
-        "forma_pago": "contado",
-        "estado_pago": "cobrado"
-    },
-    {
-        "id": 8,
-        "id_auto": 2,
-        "id_cliente": 6,
-        "id_vendedor": 7,
-        "fecha_venta": "2026-06-03",
-        "precio_final": 9400000,
-        "forma_pago": "parte de pago con otro auto",
-        "estado_pago": "cobrado"
-    },
-    {
-        "id": 9,
-        "id_auto": 5,
-        "id_cliente": 8,
-        "id_vendedor": 10,
-        "fecha_venta": "2026-06-07",
-        "precio_final": 16400000,
-        "forma_pago": "financiado",
-        "estado_pago": "pendiente"
-    },
-    {
-        "id": 10,
-        "id_auto": 7,
-        "id_cliente": 9,
-        "id_vendedor": 3,
-        "fecha_venta": "2026-06-10",
-        "precio_final": 11300000,
-        "forma_pago": "contado",
-        "estado_pago": "cobrado"
-    },
-    {
-        "id": 11,
-        "id_auto": 10,
-        "id_cliente": 4,
-        "id_vendedor": 5,
-        "fecha_venta": "2026-06-15",
-        "precio_final": 10200000,
-        "forma_pago": "contado",
-        "estado_pago": "cobrado"
-    },
-    {
-        "id": 12,
-        "id_auto": 10,
-        "id_cliente": 2,
-        "id_vendedor": 2,
-        "fecha_venta": "2026-06-17",
-        "precio_final": 13000000,
-        "forma_pago": "parte de pago con otro auto",
-        "estado_pago": "cobrado"
-    }
+  {
+    "id": 1,
+    "id_auto": 3,
+    "id_cliente": 1,
+    "id_vendedor": 2,
+    "fecha_venta": "2026-05-02",
+    "precio_final": 12400000,
+    "forma_pago": "financiado",
+    "estado_pago": "cobrado"
+  },
+  {
+    "id": 2,
+    "id_auto": 9,
+    "id_cliente": 4,
+    "id_vendedor": 1,
+    "fecha_venta": "2026-05-10",
+    "precio_final": 15800000,
+    "forma_pago": "contado",
+    "estado_pago": "cobrado"
+  },
+  {
+    "id": 3,
+    "id_auto": 1,
+    "id_cliente": 7,
+    "id_vendedor": 3,
+    "fecha_venta": "2026-05-15",
+    "precio_final": 18000000,
+    "forma_pago": "parte de pago con otro auto",
+    "estado_pago": "cobrado"
+  },
+  {
+    "id": 4,
+    "id_auto": 4,
+    "id_cliente": 2,
+    "id_vendedor": 4,
+    "fecha_venta": "2026-05-18",
+    "precio_final": 15000000,
+    "forma_pago": "financiado",
+    "estado_pago": "pendiente"
+  },
+  {
+    "id": 5,
+    "id_auto": 6,
+    "id_cliente": 5,
+    "id_vendedor": 8,
+    "fecha_venta": "2026-05-22",
+    "precio_final": 14200000,
+    "forma_pago": "contado",
+    "estado_pago": "pendiente"
+  },
+  {
+    "id": 6,
+    "id_auto": 8,
+    "id_cliente": 10,
+    "id_vendedor": 6,
+    "fecha_venta": "2026-05-27",
+    "precio_final": 19300000,
+    "forma_pago": "financiado",
+    "estado_pago": "cobrado"
+  },
+  {
+    "id": 7,
+    "id_auto": 10,
+    "id_cliente": 3,
+    "id_vendedor": 2,
+    "fecha_venta": "2026-06-01",
+    "precio_final": 11900000,
+    "forma_pago": "contado",
+    "estado_pago": "cobrado"
+  },
+  {
+    "id": 8,
+    "id_auto": 2,
+    "id_cliente": 6,
+    "id_vendedor": 7,
+    "fecha_venta": "2026-06-03",
+    "precio_final": 9400000,
+    "forma_pago": "parte de pago con otro auto",
+    "estado_pago": "cobrado"
+  },
+  {
+    "id": 9,
+    "id_auto": 5,
+    "id_cliente": 8,
+    "id_vendedor": 10,
+    "fecha_venta": "2026-06-07",
+    "precio_final": 16400000,
+    "forma_pago": "financiado",
+    "estado_pago": "pendiente"
+  },
+  {
+    "id": 10,
+    "id_auto": 7,
+    "id_cliente": 9,
+    "id_vendedor": 3,
+    "fecha_venta": "2026-06-10",
+    "precio_final": 11300000,
+    "forma_pago": "contado",
+    "estado_pago": "cobrado"
+  },
+  {
+    "id": 11,
+    "id_auto": 10,
+    "id_cliente": 4,
+    "id_vendedor": 5,
+    "fecha_venta": "2026-06-15",
+    "precio_final": 10200000,
+    "forma_pago": "contado",
+    "estado_pago": "cobrado"
+  },
+  {
+    "id": 12,
+    "id_auto": 10,
+    "id_cliente": 2,
+    "id_vendedor": 2,
+    "fecha_venta": "2026-06-17",
+    "precio_final": 13000000,
+    "forma_pago": "parte de pago con otro auto",
+    "estado_pago": "cobrado"
+  }
 ]

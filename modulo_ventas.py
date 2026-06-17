@@ -92,6 +92,25 @@ def _seleccionar_estado_pago():
 def registrar_venta(id_auto=None, id_cliente=None, id_vendedor=None, precio_final=None):
     # Si se llama con argumentos (ej. desde concretar_venta), se registra directamente sin menú
     if id_auto is not None:
+<<<<<<< HEAD
+=======
+        # Validamos que los IDs recibidos por parámetro existan en la DB
+        if _buscar_por_id("db/db_autos.json", id_auto) is None:
+            print(f"{Color.ROJO}No existe un auto con ID {id_auto}.")
+            return None
+        if (
+            id_cliente is not None
+            and _buscar_por_id("db/db_clientes.json", id_cliente) is None
+        ):
+            print(f"{Color.ROJO}No existe un cliente con ID {id_cliente}.")
+            return None
+        if (
+            id_vendedor is not None
+            and _buscar_por_id("db/db_vendedores.json", id_vendedor) is None
+        ):
+            print(f"{Color.ROJO}No existe un vendedor con ID {id_vendedor}.")
+            return None
+>>>>>>> b71656a (feat: continuar modulo ventas)
         id_ventas = _id_autoincremental("db/db_ventas.json")
         _limpiar_pantalla()
         print("\n=== CONCRETANDO VENTA DE RESERVA ===")

@@ -44,7 +44,7 @@ def _buscar_ventas_por_id_modulo(id, archivo, id_modulo):
     return resultados if resultados else None
 
 
-# Función para buscar un valor por su ID en un archivo
+# Función para buscar un valor por su ID en un archivo, retorna el dato encontrado o None si no se encuentra
 def _buscar_por_id(archivo, id):
     datos = _db_leer_datos(archivo)
 
@@ -54,10 +54,19 @@ def _buscar_por_id(archivo, id):
     return None
 
 
-# Función para buscar un registro por ID y validar su existencia
+# Función para buscar un registro por ID y validar su existencia, en este caso el usuario ingresa el ID
 def _buscar_por_id_validado(archivo, mensaje):
     while True:
         id_ingresado = _input_int(mensaje)
+        resultado = _buscar_por_id(archivo, id_ingresado)
+        if resultado is not None:
+            return resultado
+        print(f"El ID {id_ingresado} no se encontró. Intentá de nuevo.")
+
+
+def _validar_id(archivo, id, id_modulo):
+    while True:
+        id_ingresado = _input_int(f"Ingrese el ID del {id_modulo}: ")
         resultado = _buscar_por_id(archivo, id_ingresado)
         if resultado is not None:
             return resultado
