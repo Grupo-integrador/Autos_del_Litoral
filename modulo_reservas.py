@@ -312,12 +312,6 @@ def cargar_reservas_json(ruta_archivo):
     except (FileNotFoundError, json.JSONDecodeError):
         return []
 
-def cargar_autos_json(ruta_archivo):
-    try:
-        with open(ruta_archivo, 'r', encoding='utf-8') as archivo:
-            return json.load(archivo)
-    except (FileNotFoundError, json.JSONDecodeError):
-        return []
 
 def guardar_autos_json(lista_autos, ruta_archivo):
     with open(ruta_archivo, 'w', encoding='utf-8') as archivo:
@@ -347,7 +341,7 @@ def main_reservas():
     ruta_autos = "db/db_autos.json"
 
     lista_reservas = cargar_reservas_json(ruta_reservas)
-    lista_autos = cargar_autos_json(ruta_autos)
+    lista_autos = _db_leer_datos(ruta_autos)
 
     verificar_y_actualizar_vencimientos(lista_reservas, lista_autos)
     guardar_reservas_json(lista_reservas, ruta_reservas)
