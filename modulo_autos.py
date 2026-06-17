@@ -1,26 +1,24 @@
 # date, fecha de ingreso al stock, al importar date se crea con fecha real
+import json
 from datetime import date
 
 # print("=== EL PROGRAMA ESTA ARRANCANDO CORRECTAMENTE ===")
 
-# aca creamos la lista y adentro un diccionario pares clave valor, la lista es mutable, y un diccionario para cada auto
-#
+RUTA_DB_AUTOS = "db/db_autos.json"
 
-lista_autos = [
-    {
-        "id": 1,
-        "patente": "AB123CD",
-        "marca": "Chevrolet",
-        "modelo": "Corsa Classic",
-        "anio": 2014,
-        "kilometros": 120000,
-        "precio": 4500000,
-        "estado": "disponible",
-        "fecha_ingreso": date(2026, 3, 15),
-    }
-]
+def cargar_autos():
+    try:
+        with open(RUTA_DB_AUTOS, "r", encoding="utf-8") as archivo:
+            return json.load(archivo)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return []
 
-siguiente_id_auto = 2  # contador, el 1 es el corsa, ya cargado para que sea mas facil programar el codigo. arranca con 2
+def guardar_autos(lista):
+    with open(RUTA_DB_AUTOS, "w", encoding="utf-8") as archivo:
+        json.dump(lista, archivo, indent=4)
+
+lista_autos = []
+siguiente_id_auto = 1
 
 
 def pedir_entero(mensaje):
@@ -76,9 +74,10 @@ def cargar_auto_nuevo():
         "kilometros": kilometros,
         "precio": precio,
         "estado": estado,
-        "fecha_ingreso": fecha_actual,
+        "fecha_ingreso": str(fecha_actual),
     }
     lista_autos.append(nuevo_auto)
+    guardar_autos(lista_autos)
     print("Auto cargado con exito.")
     siguiente_id_auto += 1  # suma 1 a la variable global
 
@@ -134,6 +133,7 @@ def cambiar_estado_auto():
         return
     print(f"Estado actual: {auto['estado']}")
     auto["estado"] = pedir_estado_valido()
+    guardar_autos(lista_autos)
     print("Estado actualizado.")
 
 
@@ -145,10 +145,18 @@ def dar_de_baja_auto():
     confirmacion = input("Seguro? (S/N): ").upper()
     if confirmacion == "S":
         lista_autos.remove(auto)
+        guardar_autos(lista_autos)
         print("Eliminado.")
 
 
 def menu_autos():
+    global lista_autos, siguiente_id_auto
+    lista_autos = cargar_autos()
+    if len(lista_autos) > 0:
+        siguiente_id_auto = max(auto["id"] for auto in lista_autos) + 1
+    else:
+        siguiente_id_auto = 1
+
     while True:
         print("\n--- MENU AUTOS ---")
         print("1. Cargar | 2. Listar | 3. Buscar | 4. Estado | 5. Baja | 9. Volver")
