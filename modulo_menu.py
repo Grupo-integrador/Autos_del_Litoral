@@ -1,4 +1,4 @@
-from modulo_autos import main_concesionaria
+from modulo_autos import menu_autos
 from modulo_clientes import menu_clientes
 from modulo_reservas import main_reservas
 from modulo_ventas import menu_ventas
@@ -28,7 +28,7 @@ def menu_principal():
 
         match opcion:
             case 1:
-                main_concesionaria()
+                menu_autos()
             case 2:
                 menu_clientes()
             case 3:

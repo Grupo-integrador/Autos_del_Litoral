@@ -176,22 +176,10 @@ def menu_autos():
             break
 
 
-def main_concesionaria():
-    while True:
-        print("\n=== AUTOS DEL LITORAL ===")
-        print("1. Autos en stock | 0. Salir")
-        opcion = input("Opcion: ")
-        if opcion == "1":
-            menu_autos()
-        elif opcion == "0":
-            print("Saliendo...")
-            break
-
-
 # main_concesionaria()  # funcion principal, punto de entrada. como no tiene def y esta pegada al margen izq, es una
 # orden de ejecucion, en el recorrido del codido fue recolectando la info. comienza desde aca a buscar donde se definio.
 # def son solo declaraciones  que se guardan en memoria pero no se ejecutan
 
 if __name__ == "__main__":
     print("=== EL PROGRAMA ESTA ARRANCANDO CORRECTAMENTE ===")
-    main_concesionaria()
+    menu_autos()
