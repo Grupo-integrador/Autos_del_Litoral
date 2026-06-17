@@ -99,9 +99,31 @@ def _buscar_por_id(archivo, id):
 def registrar_venta(id_auto=None, id_cliente=None, id_vendedor=None, precio_final=None):
     # TODO:
     # ⚠️ Importante: cuando se registra una venta, el auto tiene que pasar automáticamente a
-    # estado "vendido". Yo no me tengo que acordar de cambiarlo.
+    # estado "vendido". Yo no me tengo que acordar de cambiarlo. (Resuelto: ahora actualiza db_autos.json)
+
+    # Si se llama con argumentos (ej. desde concretar_venta), se registra directamente sin menú
+    if id_auto is not None:
+        id_ventas = _id_autoincremental("db/db_ventas.json")
+        _limpiar_pantalla()
+        print("\n=== CONCRETANDO VENTA DE RESERVA ===")
+        nueva_venta = {
+            "id": id_ventas,
+            "id_auto": id_auto,
+            "id_cliente": id_cliente if id_cliente is not None else _input_int("Agregue el ID del cliente: "),
+            "id_vendedor": id_vendedor if id_vendedor is not None else _input_int("Agregue el ID del vendedor: "),
+            "fecha_venta": str(date.today()),
+            "precio_final": precio_final if precio_final is not None else _input_int("Agregue el precio final: "),
+            "forma_pago": _seleccionar_forma_pago(),
+            "estado_pago": _seleccionar_estado_pago(),
+        }
+        _db_inyectar_datos("db/db_ventas.json", nueva_venta)
+        _db_actualizar_dato("db/db_autos.json", id_auto, "estado", "vendido")
+        print("\nVenta registrada correctamente.")
+        input("\nPresione Enter para continuar...")
+        return nueva_venta
 
     opcion = -1
+    venta_registrada = None
     while opcion != 0:
         _limpiar_pantalla()
         print(f"""
@@ -116,46 +138,30 @@ def registrar_venta(id_auto=None, id_cliente=None, id_vendedor=None, precio_fina
         match opcion:
             case 1:
                 id_ventas = _id_autoincremental("db/db_ventas.json")
-
-                # print(ultimo_dato["id"])
-                # TODO:
-                # TRAER DATOS DE OTROS MODULOS PARA VERIFICAR SI EXISTEN:
-                # Buscar en el modulo de Autos
-                # Buscar en el modulo de Clientes
-                # Buscar en el modulo de Vendedor
                 _limpiar_pantalla()
                 nueva_venta = {
                     "id": id_ventas,
-                    #
-                    "id_auto": id_auto
-                    if id_auto is not None
-                    else _input_int("Agregue el ID del auto: "),
-                    #
-                    "id_cliente": id_cliente
-                    if id_cliente is not None
-                    else _input_int("Agregue el ID del cliente: "),
-                    #
-                    "id_vendedor": id_vendedor
-                    if id_vendedor is not None
-                    else _input_int("Agregue el ID del vendedor: "),
-                    #
+                    "id_auto": _input_int("Agregue el ID del auto: "),
+                    "id_cliente": _input_int("Agregue el ID del cliente: "),
+                    "id_vendedor": _input_int("Agregue el ID del vendedor: "),
                     "fecha_venta": str(date.today()),
-                    #
-                    "precio_final": precio_final
-                    if precio_final is not None
-                    else _input_int("Agregue el precio final: "),
-                    #
+                    "precio_final": _input_int("Agregue el precio final: "),
                     "forma_pago": _seleccionar_forma_pago(),
                     "estado_pago": _seleccionar_estado_pago(),
                 }
                 _db_inyectar_datos("db/db_ventas.json", nueva_venta)
+                _db_actualizar_dato("db/db_autos.json", nueva_venta["id_auto"], "estado", "vendido")
                 print("\nVenta registrada correctamente.")
+                venta_registrada = nueva_venta
                 input("\nPresione Enter para continuar...")
+                opcion = 0  # Volver al menú tras crear la venta
             case 0:
                 pass
             case _:
                 print("Opción no válida.")
                 input("\nPresione Enter para continuar...")
+                
+    return venta_registrada
 
 
 # Ver todas las ventas hechas

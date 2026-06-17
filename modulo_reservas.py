@@ -1,6 +1,7 @@
 import json
 from datetime import date, timedelta
 from utils.validateUtils import _input_int, Color
+from modulo_ventas import registrar_venta
 
 ESTADO_RESERVA_ACTIVA = "activa"
 ESTADO_RESERVA_VENTA = "concretada"
@@ -194,25 +195,17 @@ def concretar_venta(lista_reservas, lista_autos, lista_ventas):
             auto_encontrado = a
             break
 
-    id_venta = 1
-    if len(lista_ventas) > 0:
-        id_venta = lista_ventas[-1]["id"] + 1
+    # Concretar la venta usando la función registrar_venta de modulo_ventas
+    nueva_venta = registrar_venta(
+        id_auto=reserva_a_concretar["id_auto"],
+        id_cliente=reserva_a_concretar["id_cliente"],
+        id_vendedor=reserva_a_concretar["id_vendedor"],
+        precio_final=reserva_a_concretar["monto_sena"]
+    )
 
-    forma_pago = input("Ingrese forma de pago (contado/financiado/parte de pago con otro auto): ").strip()
-    estado_pago = input("Ingrese estado de pago (cobrado/pendiente/en cuotas): ").strip()
-
-    nueva_venta = {
-        "id": id_venta,
-        "id_auto": reserva_a_concretar["id_auto"],
-        "id_cliente": reserva_a_concretar["id_cliente"],
-        "id_vendedor": reserva_a_concretar["id_vendedor"],
-        "fecha_venta": date.today().isoformat(),
-        "precio_final": reserva_a_concretar["monto_sena"],  # seña + monto a saldar
-        "forma_pago": forma_pago,
-        "estado_pago": estado_pago
-    }
-    lista_ventas.append(nueva_venta)
-    print("¡Venta concretada, estado del auto actualizado a 'vendido' y registro de venta creado exitosamente!")
+    if nueva_venta:
+        lista_ventas.append(nueva_venta)
+        print("¡Venta concretada, estado del auto actualizado a 'vendido' y registro de venta creado exitosamente!")
 
 
 # funcion para cancelar reservas
