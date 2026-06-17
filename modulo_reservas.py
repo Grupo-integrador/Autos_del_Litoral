@@ -142,7 +142,7 @@ def buscar_reservas(lista_reservas):
                 print(f"{Color.ROJO}No se encontró ninguna reserva para el vendedor especificado.{Color.RESET}")
 
 # funcion para concretar ventas
-def concretar_venta(lista_reservas, lista_autos, lista_ventas):
+def concretar_venta(lista_reservas, lista_autos):
     print("1. Concretar venta por id de auto")
     print("2. Concretar venta por id de cliente")
     print("3. Concretar venta por id de vendedor")
@@ -204,7 +204,6 @@ def concretar_venta(lista_reservas, lista_autos, lista_ventas):
     )
 
     if nueva_venta:
-        lista_ventas.append(nueva_venta)
         print("¡Venta concretada, estado del auto actualizado a 'vendido' y registro de venta creado exitosamente!")
 
 
@@ -299,16 +298,7 @@ def guardar_autos_json(lista_autos, ruta_archivo):
     with open(ruta_archivo, 'w', encoding='utf-8') as archivo:
         json.dump(lista_autos, archivo, indent=4)
 
-def cargar_ventas_json(ruta_archivo):
-    try:
-        with open(ruta_archivo, 'r', encoding='utf-8') as archivo:
-            return json.load(archivo)
-    except (FileNotFoundError, json.JSONDecodeError):
-        return []
 
-def guardar_ventas_json(lista_ventas, ruta_archivo):
-    with open(ruta_archivo, 'w', encoding='utf-8') as archivo:
-        json.dump(lista_ventas, archivo, indent=4)
 
 # funcion guardar reservas en el archivo json
 def guardar_reservas_json(lista_reservas, ruta_archivo):
@@ -330,11 +320,9 @@ def guardar_reservas_json(lista_reservas, ruta_archivo):
 def main_reservas():
     ruta_reservas = "db/db_reservas.json"
     ruta_autos = "db/db_autos.json"
-    ruta_ventas = "db/db_ventas.json"
 
     lista_reservas = cargar_reservas_json(ruta_reservas)
     lista_autos = cargar_autos_json(ruta_autos)
-    lista_ventas = cargar_ventas_json(ruta_ventas)
 
     verificar_y_actualizar_vencimientos(lista_reservas, lista_autos)
     guardar_reservas_json(lista_reservas, ruta_reservas)
@@ -366,10 +354,9 @@ def main_reservas():
             case 3:
                 buscar_reservas(lista_reservas)
             case 4:
-                concretar_venta(lista_reservas, lista_autos, lista_ventas)
+                concretar_venta(lista_reservas, lista_autos)
                 guardar_reservas_json(lista_reservas, ruta_reservas)
                 guardar_autos_json(lista_autos, ruta_autos)
-                guardar_ventas_json(lista_ventas, ruta_ventas)
             case 5:
                 cancelar_reserva(lista_reservas, lista_autos)
                 guardar_reservas_json(lista_reservas, ruta_reservas)
