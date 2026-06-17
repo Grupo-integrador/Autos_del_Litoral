@@ -2,6 +2,7 @@ from modulo_autos import main_concesionaria
 from modulo_clientes import menu_clientes
 from modulo_reservas import main_reservas
 from modulo_ventas import menu_ventas
+from modulo_vendedores import menu_vendedores
 from utils.validateUtils import _input_int, _limpiar_pantalla
 
 
@@ -35,7 +36,7 @@ def menu_principal():
             case 4:
                 main_reservas()
             case 5:
-                print("Modulo Vendedores")
+                menu_vendedores()
             case 0:
                 print("Saliendo del programa")
                 break
