@@ -141,48 +141,95 @@ def buscar_reservas(lista_reservas):
             if not encontrado:
                 print(f"{Color.ROJO}No se encontró ninguna reserva para el vendedor especificado.{Color.RESET}")
 
-# funcion para concretar ventas
-def concretar_venta(lista_reservas, lista_autos):
-    print("1. Concretar venta por id de auto")
-    print("2. Concretar venta por id de cliente")
-    print("3. Concretar venta por id de vendedor")
+# funcion auxiliar para mostrar el detalle de una reserva
+def mostrar_detalle_reserva(reserva):
+    print(f"""
+    ----------------------------------------
+    ID Reserva:      {reserva['id']}
+    Estado:          {reserva['estado'].upper()}
+    ID del Auto:     {reserva['id_auto']}
+    ID del Cliente:  {reserva['id_cliente']}
+    ID del Vendedor: {reserva['id_vendedor']}
+    Fecha Reserva:   {reserva['fecha_reserva'].strftime('%d-%m-%Y') if hasattr(reserva['fecha_reserva'], 'strftime') else reserva['fecha_reserva']}
+    Fecha Límite:    {reserva['fecha_limite'].strftime('%d-%m-%Y') if hasattr(reserva['fecha_limite'], 'strftime') else reserva['fecha_limite']}
+    Monto de Seña:   ${reserva['monto_sena']}
+    ----------------------------------------
+    """)
+
+
+# funcion auxiliar para filtrar reservas activas por un criterio
+def obtener_reservas_activas_por_criterio(lista_reservas, campo, valor):
+    coincidencias = []
+    for r in lista_reservas:
+        if r["estado"] == ESTADO_RESERVA_ACTIVA and r[campo] == valor:
+            coincidencias.append(r)
+    return coincidencias
+
+
+# funcion auxiliar para buscar y seleccionar una reserva de forma interactiva y segura
+def elegir_reserva_activa(lista_reservas):
+    print("1. Buscar por id de auto")
+    print("2. Buscar por id de cliente")
+    print("3. Buscar por id de vendedor")
+    print("4. Buscar por id de reserva")
 
     opcion = _input_int("Opcion: ")
-    reserva_a_concretar = None
+    campo = None
+    mensaje_input = ""
 
     match opcion:
         case 1:
-            auto = _input_int("Ingrese auto: ")
-            for nueva_reserva in lista_reservas:
-                if nueva_reserva["id_auto"] == auto and nueva_reserva["estado"] == ESTADO_RESERVA_ACTIVA:
-                    reserva_a_concretar = nueva_reserva
-                    break
-            if not reserva_a_concretar:
-                print("No se encontró una reserva activa para el auto especificado.")
-                return
-
+            campo = "id_auto"
+            mensaje_input = "Ingrese id del auto: "
         case 2:
-            cliente = _input_int("Ingrese cliente: ")
-            for nueva_reserva in lista_reservas:
-                if nueva_reserva["id_cliente"] == cliente and nueva_reserva["estado"] == ESTADO_RESERVA_ACTIVA:
-                    reserva_a_concretar = nueva_reserva
-                    break
-            if not reserva_a_concretar:
-                print("No se encontró una reserva activa para el cliente especificado.")
-                return
-
+            campo = "id_cliente"
+            mensaje_input = "Ingrese id del cliente: "
         case 3:
-            vendedor = _input_int("Ingrese vendedor: ")
-            for nueva_reserva in lista_reservas:
-                if nueva_reserva["id_vendedor"] == vendedor and nueva_reserva["estado"] == ESTADO_RESERVA_ACTIVA:
-                    reserva_a_concretar = nueva_reserva
-                    break
-            if not reserva_a_concretar:
-                print("No se encontró una reserva activa para el vendedor especificado.")
-                return
+            campo = "id_vendedor"
+            mensaje_input = "Ingrese id del vendedor: "
+        case 4:
+            campo = "id"
+            mensaje_input = "Ingrese id de la reserva: "
         case _:
-            print("Opción inválida.")
-            return
+            print(f"{Color.ROJO}Opción inválida.{Color.RESET}")
+            return None
+
+    valor = _input_int(mensaje_input)
+    coincidencias = obtener_reservas_activas_por_criterio(lista_reservas, campo, valor)
+
+    if not coincidencias:
+        print(f"{Color.ROJO}No se encontró ninguna reserva activa con el criterio especificado.{Color.RESET}")
+        return None
+
+    if len(coincidencias) == 1:
+        reserva = coincidencias[0]
+        print("\nSe encontró la siguiente reserva:")
+        mostrar_detalle_reserva(reserva)
+        return reserva
+    else:
+        print(f"\n{Color.AMARILLO}Se encontraron múltiples reservas activas con ese criterio:{Color.RESET}")
+        for r in coincidencias:
+            mostrar_detalle_reserva(r)
+        
+        id_elegido = _input_int("Ingrese el ID de la Reserva que desea seleccionar de la lista superior: ")
+        for r in coincidencias:
+            if r["id"] == id_elegido:
+                return r
+        print(f"{Color.ROJO}El ID de reserva ingresado no corresponde a ninguna de las opciones listadas.{Color.RESET}")
+        return None
+
+
+# funcion para concretar ventas
+def concretar_venta(lista_reservas, lista_autos):
+    print("--- CONCRETAR VENTA DE RESERVA ---")
+    reserva_a_concretar = elegir_reserva_activa(lista_reservas)
+    if not reserva_a_concretar:
+        return
+
+    confirmar = input("¿Confirmar la concreción de esta reserva en venta? (s/n): ").strip().lower()
+    if confirmar != 's':
+        print("Operación abortada. La reserva sigue activa.")
+        return
 
     monto_saldar = _input_int("Ingresar monto a saldar: ")
     reserva_a_concretar["monto_sena"] += monto_saldar
@@ -209,67 +256,22 @@ def concretar_venta(lista_reservas, lista_autos):
 
 # funcion para cancelar reservas
 def cancelar_reserva(lista_reservas, lista_autos):
-    print("1. Cancelar reserva por id de auto")
-    print("2. Cancelar reserva por id de cliente")
-    print("3. Cancelar reserva por id de vendedor")
+    print("--- CANCELAR RESERVA ---")
+    reserva_a_cancelar = elegir_reserva_activa(lista_reservas)
+    if not reserva_a_cancelar:
+        return
 
-    opcion = _input_int("Opcion: ")
+    confirmar = input("¿Seguro que quieres cancelar esta reserva? (s/n): ").strip().lower()
+    if confirmar == 's':
+        reserva_a_cancelar["estado"] = ESTADO_RESERVA_CANCELADA
 
-    match opcion:
-        case 1:
-            auto = _input_int("Ingrese id del auto: ")
-            for nueva_reserva in lista_reservas:
-                if nueva_reserva["id_auto"] == auto and nueva_reserva["estado"] == ESTADO_RESERVA_ACTIVA:
-                    confirmar = input("¿Seguro que quieres cancelar esta reserva? (s/n): ").strip().lower()
-                    if confirmar == 's':
-                        nueva_reserva["estado"] = ESTADO_RESERVA_CANCELADA
-
-                        for a in lista_autos:
-                            if a["id"] == nueva_reserva["id_auto"]:
-                                a["estado"] = "disponible"
-                                break
-                        print(f"{Color.VERDE}¡Reserva cancelada exitosamente!{Color.RESET}")
-                    else:
-                        print("Operación abortada. La reserva sigue activa.")
-                    return
-            print(f"{Color.ROJO}No se encontró una reserva activa para el auto especificado.{Color.RESET}")
-            return
-        case 2:
-            cliente = _input_int("Ingrese id del cliente: ")
-            for nueva_reserva in lista_reservas:
-                if nueva_reserva["id_cliente"] == cliente and nueva_reserva["estado"] == ESTADO_RESERVA_ACTIVA:
-                    confirmar = input("¿Seguro que quieres cancelar esta reserva? (s/n): ").strip().lower()
-                    if confirmar == 's':
-                        nueva_reserva["estado"] = ESTADO_RESERVA_CANCELADA
-                        
-                        for a in lista_autos:
-                            if a["id"] == nueva_reserva["id_auto"]:
-                                a["estado"] = "disponible"
-                                break
-                        print(f"{Color.VERDE}¡Reserva cancelada exitosamente!{Color.RESET}")
-                    else:
-                        print("Operación abortada. La reserva sigue activa.")
-                    return
-            print(f"{Color.ROJO}No se encontró una reserva activa para el cliente especificado.{Color.RESET}")
-            return
-        case 3:
-            vendedor = _input_int("Ingrese id del vendedor: ")
-            for nueva_reserva in lista_reservas:
-                if nueva_reserva["id_vendedor"] == vendedor and nueva_reserva["estado"] == ESTADO_RESERVA_ACTIVA:
-                    confirmar = input("¿Seguro que quieres cancelar esta reserva? (s/n): ").strip().lower()
-                    if confirmar == 's':
-                        nueva_reserva["estado"] = ESTADO_RESERVA_CANCELADA
-                        
-                        for a in lista_autos:
-                            if a["id"] == nueva_reserva["id_auto"]:
-                                a["estado"] = "disponible"
-                                break
-                        print(f"{Color.VERDE}¡Reserva cancelada exitosamente!{Color.RESET}")
-                    else:
-                        print("Operación abortada. La reserva sigue activa.")
-                    return
-            print(f"{Color.ROJO}No se encontró una reserva activa para el vendedor especificado.{Color.RESET}")
-            return
+        for a in lista_autos:
+            if a["id"] == reserva_a_cancelar["id_auto"]:
+                a["estado"] = "disponible"
+                break
+        print(f"{Color.VERDE}¡Reserva cancelada exitosamente!{Color.RESET}")
+    else:
+        print("Operación abortada. La reserva sigue activa.")
 
 # Carga el JSON y convierte las fechas de texto a objetos date. Recorremos la lista y transformamos los strings a objetos date
 def cargar_reservas_json(ruta_archivo):
