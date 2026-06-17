@@ -1,6 +1,7 @@
 import json
 from datetime import date, timedelta
 from utils.validateUtils import _input_int, Color
+from utils.dbUtils import _db_leer_datos
 from modulo_ventas import registrar_venta
 
 ESTADO_RESERVA_ACTIVA = "activa"
@@ -27,8 +28,30 @@ def registrar_nueva_reserva(lista_reservas, lista_autos):
         print(f"{Color.ROJO}El auto no está disponible para reserva (estado actual: {auto_encontrado['estado']}).{Color.RESET}")
         return
 
+    # Validar cliente
     cliente = _input_int("Ingresar id del cliente: ")
+    datos_clientes = _db_leer_datos("db/db_clientes.json")
+    cliente_encontrado = False
+    for c in datos_clientes:
+        if c["id"] == cliente:
+            cliente_encontrado = True
+            break
+    if not cliente_encontrado:
+        print(f"{Color.ROJO}No se encontró ningún cliente con el ID especificado.{Color.RESET}")
+        return
+
+    # Validar vendedor
     vendedor = _input_int("Ingresar id del vendedor: ")
+    datos_vendedores = _db_leer_datos("db/db_vendedores.json")
+    vendedor_encontrado = False
+    for v in datos_vendedores:
+        if v["id"] == vendedor:
+            vendedor_encontrado = True
+            break
+    if not vendedor_encontrado:
+        print(f"{Color.ROJO}No se encontró ningún vendedor con el ID especificado.{Color.RESET}")
+        return
+
     monto_reserva = _input_int("Ingresar monto_reserva: ")
     
     momento_actual = date.today()
