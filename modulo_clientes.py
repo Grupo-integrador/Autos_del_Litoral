@@ -18,6 +18,20 @@
 
 
 # 👤 Módulo de Clientes - Concesionaria
+import json
+
+RUTA_DB_CLIENTES = "db/db_clientes.json"
+
+def cargar_clientes():
+    try:
+        with open(RUTA_DB_CLIENTES, "r", encoding="utf-8") as archivo:
+            return json.load(archivo)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return []
+
+def guardar_clientes(lista):
+    with open(RUTA_DB_CLIENTES, "w", encoding="utf-8") as archivo:
+        json.dump(lista, archivo, indent=4)
 
 listas_Clientes = []
 id_Cliente = 1
@@ -34,15 +48,16 @@ def registrar_Cliente():
 
     nuevo_Cliente = {
         "id": id_Cliente,
-        "DNI": DNI_Cliente,
+        "dni": DNI_Cliente,
         "nombre_completo": nombre_completo_Cliente,
         "telefono": telefono_Cliente,
-        "mail": mail_Cliente,
+        "email": mail_Cliente,
         "localidad": localidad_Cliente,
         "que_busca": que_busca_Cliente,
     }
     id_Cliente += 1
     listas_Clientes.append(nuevo_Cliente)
+    guardar_clientes(listas_Clientes)
     print("Cliente registrado exitosamente.")
 
 
@@ -53,10 +68,10 @@ def listar_Clientes():
 
     for cliente in listas_Clientes:
         print(f"ID: {cliente['id']}")
-        print(f"DNI: {cliente['DNI']}")
+        print(f"DNI: {cliente['dni']}")
         print(f"Nombre completo: {cliente['nombre_completo']}")
         print(f"Teléfono: {cliente['telefono']}")
-        print(f"Email: {cliente['mail']}")
+        print(f"Email: {cliente['email']}")
         print(f"Localidad: {cliente['localidad']}")
         print(f"Qué busca: {cliente['que_busca']}")
         print("-" * 20)
@@ -69,7 +84,7 @@ def buscar_Cliente():
     elif opcion == "2":
         criterio_busqueda = "nombre_completo"
     elif opcion == "3":
-        criterio_busqueda = "DNI"
+        criterio_busqueda = "dni"
     else:
         print("Opción no válida.")
         return
@@ -81,10 +96,10 @@ def buscar_Cliente():
     for cliente in listas_Clientes:
         if cliente[criterio_busqueda] == valor_busqueda:
             print(f"ID: {cliente['id']}")
-            print(f"DNI: {cliente['DNI']}")
+            print(f"DNI: {cliente['dni']}")
             print(f"Nombre completo: {cliente['nombre_completo']}")
             print(f"Teléfono: {cliente['telefono']}")
-            print(f"Email: {cliente['mail']}")
+            print(f"Email: {cliente['email']}")
             print(f"Localidad: {cliente['localidad']}")
             print(f"Qué busca: {cliente['que_busca']}")
             print("-" * 20)
@@ -99,28 +114,29 @@ def actualizar_Cliente():
             print(
                 "Cliente encontrado. Ingrese los nuevos datos (deje en blanco para mantener el valor actual):"
             )
-            nuevo_DNI = input(f"DNI ({cliente['DNI']}): ")
+            nuevo_DNI = input(f"DNI ({cliente['dni']}): ")
             nuevo_nombre_completo = input(
                 f"Nombre completo ({cliente['nombre_completo']}): "
             )
             nuevo_telefono = input(f"Teléfono ({cliente['telefono']}): ")
-            nuevo_mail = input(f"Email ({cliente['mail']}): ")
+            nuevo_mail = input(f"Email ({cliente['email']}): ")
             nueva_localidad = input(f"Localidad ({cliente['localidad']}): ")
             nuevo_que_busca = input(f"Qué busca ({cliente['que_busca']}): ")
 
             if nuevo_DNI:
-                cliente["DNI"] = nuevo_DNI
+                cliente["dni"] = nuevo_DNI
             if nuevo_nombre_completo:
                 cliente["nombre_completo"] = nuevo_nombre_completo
             if nuevo_telefono:
                 cliente["telefono"] = nuevo_telefono
             if nuevo_mail:
-                cliente["mail"] = nuevo_mail
+                cliente["email"] = nuevo_mail
             if nueva_localidad:
                 cliente["localidad"] = nueva_localidad
             if nuevo_que_busca:
                 cliente["que_busca"] = nuevo_que_busca
 
+            guardar_clientes(listas_Clientes)
             print("Cliente actualizado exitosamente.")
             return
     print("Cliente no encontrado.")
@@ -135,6 +151,7 @@ def eliminar_Cliente():
             )
             if confirmacion.lower() == "s":
                 del listas_Clientes[i]
+                guardar_clientes(listas_Clientes)
                 print("Cliente eliminado exitosamente.")
             else:
                 print("Eliminación cancelada.")
@@ -144,6 +161,13 @@ def eliminar_Cliente():
 
 # ✅ El menú ahora está dentro de una función, no se ejecuta solo al importar
 def menu_clientes():
+    global listas_Clientes, id_Cliente
+    listas_Clientes = cargar_clientes()
+    if len(listas_Clientes) > 0:
+        id_Cliente = max(cliente["id"] for cliente in listas_Clientes) + 1
+    else:
+        id_Cliente = 1
+
     while True:
         print("\n--- Menú de Clientes ---")
         print("1. Registrar cliente")
