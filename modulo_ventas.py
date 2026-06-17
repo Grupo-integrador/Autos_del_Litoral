@@ -96,7 +96,7 @@ def _buscar_por_id(archivo, id):
 
 
 # Registrar una venta nueva
-def registrar_venta():
+def registrar_venta(id_auto=None, id_cliente=None, id_vendedor=None, precio_final=None):
     # TODO:
     # ⚠️ Importante: cuando se registra una venta, el auto tiene que pasar automáticamente a
     # estado "vendido". Yo no me tengo que acordar de cambiarlo.
@@ -119,18 +119,32 @@ def registrar_venta():
 
                 # print(ultimo_dato["id"])
                 # TODO:
-                # TRAER DATOS DE OTROS MODULOS:
+                # TRAER DATOS DE OTROS MODULOS PARA VERIFICAR SI EXISTEN:
                 # Buscar en el modulo de Autos
                 # Buscar en el modulo de Clientes
                 # Buscar en el modulo de Vendedor
                 _limpiar_pantalla()
                 nueva_venta = {
                     "id": id_ventas,
-                    "id_auto": _input_int("Agregue el ID del auto: "),
-                    "id_cliente": _input_int("Agregue el ID del cliente: "),
-                    "id_vendedor": _input_int("Agregue el ID del vendedor: "),
+                    #
+                    "id_auto": id_auto
+                    if id_auto is not None
+                    else _input_int("Agregue el ID del auto: "),
+                    #
+                    "id_cliente": id_cliente
+                    if id_cliente is not None
+                    else _input_int("Agregue el ID del cliente: "),
+                    #
+                    "id_vendedor": id_vendedor
+                    if id_vendedor is not None
+                    else _input_int("Agregue el ID del vendedor: "),
+                    #
                     "fecha_venta": str(date.today()),
-                    "precio_final": _input_int("Agregue el precio final: "),
+                    #
+                    "precio_final": precio_final
+                    if precio_final is not None
+                    else _input_int("Agregue el precio final: "),
+                    #
                     "forma_pago": _seleccionar_forma_pago(),
                     "estado_pago": _seleccionar_estado_pago(),
                 }
