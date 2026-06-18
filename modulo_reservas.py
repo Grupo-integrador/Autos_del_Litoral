@@ -117,10 +117,9 @@ def listar_reservas_activas(lista_reservas):
     if not tiene_activas:
         print("No hay reservas activas")
 
-
 # funcion para buscar reservas
 def buscar_reservas(lista_reservas):
-
+    # se buscara por id 
     print("1. Buscar por id de auto")
     print("2. Buscar por id de cliente")
     print("3. Buscar por id de vendedor")
