@@ -187,6 +187,11 @@ def cambiar_estado_auto(id_auto=None, nuevo_valor=None):
     # Busca el auto en la base de datos
     auto = _buscar_por_id("db/db_autos.json", id_auto)
 
+    # Si el nuevo valor viene por parametro, se actualiza directamente
+    if nuevo_valor is not None:
+        _db_actualizar_dato("db/db_autos.json", id_auto, "estado", nuevo_valor)
+        return
+
     # Si el nuevo valor no viene por parametro, se pide al usuario que lo ingrese y luego se actualiza
     if auto is not None:
         print(f"Estado actual: {auto['estado']}")

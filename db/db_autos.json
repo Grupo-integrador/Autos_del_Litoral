@@ -18,7 +18,7 @@
         "anio": 2016,
         "kilometros": 112000,
         "precio": 9800000,
-        "estado": "reservado",
+        "estado": "disponible",
         "fecha_ingreso": "2026-04-28"
     },
     {
@@ -51,7 +51,7 @@
         "anio": 2021,
         "kilometros": 43000,
         "precio": 16800000,
-        "estado": "disponible",
+        "estado": "vendido",
         "fecha_ingreso": "2026-05-19"
     },
     {
@@ -84,7 +84,7 @@
         "anio": 2019,
         "kilometros": 71000,
         "precio": 19800000,
-        "estado": "disponible",
+        "estado": "vendido",
         "fecha_ingreso": "2026-03-29"
     },
     {

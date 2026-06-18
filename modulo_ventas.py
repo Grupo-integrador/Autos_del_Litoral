@@ -17,7 +17,6 @@
 # • Estado del pago (cobrado, pendiente, en cuotas).
 
 from datetime import date
-from gettext import Catalog
 
 from modulo_autos import cambiar_estado_auto
 from utils.dbUtils import (
@@ -361,7 +360,7 @@ def buscar_venta():
                         else:
                             print(f"""
     ----------------------------------------
-    {Catalog}ID de venta:      {Color.RESET}  {venta["id"]}
+    {Color.AZUL}ID de venta:      {Color.RESET}  {venta["id"]}
     {Color.CYAN}ID del auto:      {Color.RESET}  {venta["id_auto"]}
     {Color.CYAN}ID del cliente:   {Color.RESET}  {venta["id_cliente"]}
     {Color.CYAN}ID del vendedor:  {Color.RESET}  {venta["id_vendedor"]}
@@ -487,8 +486,10 @@ def cambiar_estado_de_venta():
                 if confirmacion == "n":
                     return
                 elif confirmacion != "s":
-                    print("\nOpción inválida.")
-                    input("\nPresione Enter para continuar...")
+                    print(f"\n{Color.ROJO}Opción inválida.{Color.RESET}")
+                    input(
+                        f"\nPresione {Color.AMARILLO}ENTER {Color.RESET}para continuar..."
+                    )
                     return
 
                 venta["estado_pago"] = _seleccionar_estado_pago()
@@ -501,13 +502,19 @@ def cambiar_estado_de_venta():
                     venta["estado_pago"],
                 )  # Archivo, ID de la venta, campo a actualizar, nuevo valor
 
-                print("\nEstado de la venta actualizado correctamente.")
-                input("Presione Enter para continuar...")
+                print(
+                    f"\n{Color.VERDE}Estado de la venta actualizado correctamente.{Color.RESET}"
+                )
+                input(
+                    f"\nPresione {Color.AMARILLO}ENTER {Color.RESET}para continuar..."
+                )
             case 0:
                 pass
             case _:
-                print("\nOpción inválida.")
-                input("\nPresione Enter para continuar...")
+                print(f"\n{Color.ROJO}Opción inválida.{Color.RESET}")
+                input(
+                    f"\nPresione {Color.AMARILLO}ENTER {Color.RESET}para continuar..."
+                )
 
 
 # Eliminar una venta si se anula la operación (rara vez, pero pasa).
