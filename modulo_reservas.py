@@ -188,7 +188,7 @@ def obtener_reservas_activas_por_criterio(lista_reservas, campo, valor):
     return coincidencias
 
 
-# funcion auxiliar para buscar y seleccionar una reserva de forma interactiva y segura
+# funcion auxiliar para buscar y seleccionar una reserva 
 def elegir_reserva_activa(lista_reservas):
     print("1. Buscar por id de auto")
     print("2. Buscar por id de cliente")
@@ -257,12 +257,11 @@ def concretar_venta(lista_reservas, lista_autos):
     reserva_a_concretar["monto_sena"] += monto_saldar
     reserva_a_concretar["estado"] = ESTADO_RESERVA_VENTA
 
-    auto_encontrado = None
     for a in lista_autos:
         if a["id"] == reserva_a_concretar["id_auto"]:
             a["estado"] = "vendido"
-            auto_encontrado = a
             break
+
 
     # Concretar la venta usando la función registrar_venta de modulo_ventas
     nueva_venta = registrar_venta(

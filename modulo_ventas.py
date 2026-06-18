@@ -117,7 +117,7 @@ def registrar_venta(id_auto=None, id_cliente=None, id_vendedor=None, precio_fina
             "estado_pago": _seleccionar_estado_pago(),
         }
         _db_inyectar_datos("db/db_ventas.json", nueva_venta)
-        _db_actualizar_dato("db/db_autos.json", id_auto, "estado", "vendido")
+        
         print("\nVenta registrada correctamente.")
         input("\nPresione Enter para continuar...")
         return nueva_venta
