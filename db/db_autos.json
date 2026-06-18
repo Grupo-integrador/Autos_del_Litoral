@@ -1,0 +1,112 @@
+[
+  {
+    "id": 1,
+    "patente": "AF123GH",
+    "marca": "Toyota",
+    "modelo": "Corolla",
+    "anio": 2018,
+    "kilometros": 85000,
+    "precio": 18500000,
+    "estado": "disponible",
+    "fecha_ingreso": "2026-05-12"
+  },
+  {
+    "id": 2,
+    "patente": "AB456JK",
+    "marca": "Volkswagen",
+    "modelo": "Gol Trend",
+    "anio": 2016,
+    "kilometros": 112000,
+    "precio": 9800000,
+    "estado": "reservado",
+    "fecha_ingreso": "2026-04-28"
+  },
+  {
+    "id": 3,
+    "patente": "AC789LM",
+    "marca": "Ford",
+    "modelo": "Focus",
+    "anio": 2017,
+    "kilometros": 97000,
+    "precio": 12800000,
+    "estado": "vendido",
+    "fecha_ingreso": "2026-03-14"
+  },
+  {
+    "id": 4,
+    "patente": "AD321NP",
+    "marca": "Chevrolet",
+    "modelo": "Onix",
+    "anio": 2020,
+    "kilometros": 52000,
+    "precio": 15400000,
+    "estado": "en taller",
+    "fecha_ingreso": "2026-06-01"
+  },
+  {
+    "id": 5,
+    "patente": "AE654QR",
+    "marca": "Fiat",
+    "modelo": "Cronos",
+    "anio": 2021,
+    "kilometros": 43000,
+    "precio": 16800000,
+    "estado": "disponible",
+    "fecha_ingreso": "2026-05-19"
+  },
+  {
+    "id": 6,
+    "patente": "AF987ST",
+    "marca": "Peugeot",
+    "modelo": "208",
+    "anio": 2019,
+    "kilometros": 68000,
+    "precio": 14600000,
+    "estado": "en taller",
+    "fecha_ingreso": "2026-04-10"
+  },
+  {
+    "id": 7,
+    "patente": "AG159UV",
+    "marca": "Renault",
+    "modelo": "Sandero",
+    "anio": 2018,
+    "kilometros": 92000,
+    "precio": 11700000,
+    "estado": "reservado",
+    "fecha_ingreso": "2026-05-05"
+  },
+  {
+    "id": 8,
+    "patente": "AH753WX",
+    "marca": "Honda",
+    "modelo": "Civic",
+    "anio": 2019,
+    "kilometros": 71000,
+    "precio": 19800000,
+    "estado": "disponible",
+    "fecha_ingreso": "2026-03-29"
+  },
+  {
+    "id": 9,
+    "patente": "AI258YZ",
+    "marca": "Nissan",
+    "modelo": "Versa",
+    "anio": 2020,
+    "kilometros": 48000,
+    "precio": 16200000,
+    "estado": "vendido",
+    "fecha_ingreso": "2026-02-18"
+  },
+  {
+    "id": 10,
+    "patente": "AJ369BC",
+    "marca": "Citro\u00ebn",
+    "modelo": "C4 Lounge",
+    "anio": 2017,
+    "kilometros": 103000,
+    "precio": 12300000,
+    "estado": "vendido",
+    "fecha_ingreso": "2026-05-23"
+  }
+]

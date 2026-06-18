@@ -1,6 +1,7 @@
-from modulo_autos import main_concesionaria
+from modulo_autos import menu_autos
 from modulo_clientes import menu_clientes
 from modulo_reservas import main_reservas
+from modulo_vendedores import menu_vendedores
 from modulo_ventas import menu_ventas
 from modulo_vendedores import menu_vendedores
 from utils.validateUtils import _input_int
@@ -9,16 +10,17 @@ from utils.validateUtils import _input_int
 def menu_principal():
 
     while True:
-        print("""
+        _limpiar_pantalla()
+        print(f"""
     ═══════════════════════════════════════════════════
     🚗 AUTOS DEL LITORAL — Sistema v1.0
     ═══════════════════════════════════════════════════
-    1. Autos en stock
-    2. Clientes
-    3. Ventas
-    4. Reservas
-    5. Vendedores
-    0. Salir
+    {Color.CYAN}1. {Color.RESET}Autos en stock
+    {Color.CYAN}2. {Color.RESET}Clientes
+    {Color.CYAN}3. {Color.RESET}Ventas
+    {Color.CYAN}4. {Color.RESET}Reservas
+    {Color.CYAN}5. {Color.RESET}Vendedores
+    {Color.ROJO}0. {Color.RESET}Salir del programa
 
     ¿Qué querés hacer?
             """)
@@ -27,7 +29,7 @@ def menu_principal():
 
         match opcion:
             case 1:
-                main_concesionaria()
+                menu_autos()
             case 2:
                 menu_clientes()
             case 3:
@@ -37,7 +39,11 @@ def menu_principal():
             case 5:
                 menu_vendedores()
             case 0:
-                print("Saliendo del programa")
+                print(f"""
+    ═══════════════════════════════════════════════════
+                    {Color.AMARILLO}Saliendo del programa{Color.RESET}
+    ═══════════════════════════════════════════════════
+    """)
                 break
             case _:
                 print("Opción inválida, vuelva a intentarlo.\n")
