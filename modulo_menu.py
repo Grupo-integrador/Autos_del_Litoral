@@ -3,7 +3,8 @@ from modulo_clientes import menu_clientes
 from modulo_reservas import main_reservas
 from modulo_vendedores import menu_vendedores
 from modulo_ventas import menu_ventas
-from utils.validateUtils import Color, _input_int, _limpiar_pantalla
+from modulo_vendedores import menu_vendedores
+from utils.validateUtils import _input_int
 
 
 def menu_principal():
