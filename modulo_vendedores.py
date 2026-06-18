@@ -1,6 +1,6 @@
 import json
 
-from utils.validateUtils import Color
+from utils.validateUtils import Color, _limpiar_pantalla
 
 RUTA_DB_VENDEDORES = "db/db_vendedores.json"
 
@@ -56,19 +56,23 @@ def listar_vendedores():
         return
 
     for vendedor in lista_vendedores:
-        print(f"ID: {vendedor['id']}")
-        print(f"DNI: {vendedor['dni']}")
-        print(f"Nombre: {vendedor['nombre_completo']}")
-        print(f"Teléfono: {vendedor['telefono']}")
-        print(f"Email: {vendedor['email']}")
-        print(f"Comisión: {vendedor['comision_porcentaje']}%")
-        print(f"Fecha ingreso: {vendedor['fecha_ingreso']}")
-        print(f"Estado: {vendedor['estado']}")
+        print(f"{Color.CYAN}ID: {Color.RESET}{vendedor['id']}")
+        print(f"{Color.CYAN}DNI: {Color.RESET}{vendedor['dni']}")
+        print(f"{Color.CYAN}Nombre: {Color.RESET}{vendedor['nombre_completo']}")
+        print(f"{Color.CYAN}Teléfono: {Color.RESET}{vendedor['telefono']}")
+        print(f"{Color.CYAN}Email: {Color.RESET}{vendedor['email']}")
+        print(f"{Color.CYAN}Comisión: {Color.RESET}{vendedor['comision_porcentaje']}%")
+        print(f"{Color.CYAN}Fecha ingreso: {Color.RESET}{vendedor['fecha_ingreso']}")
+        print(f"{Color.CYAN}Estado: {Color.RESET}{vendedor['estado']}")
         print("-" * 20)
+
+    input(f"\nPresione {Color.AMARILLO}ENTER {Color.RESET}para continuar...")
 
 
 def buscar_vendedor():
-    opcion = input("¿Buscar por?\n1. ID\n2. Nombre\n3. DNI\nIngrese una opción: ")
+    opcion = input(
+        f"¿Buscar por?\n{Color.CYAN}1. ID\n2. Nombre\n3. DNI\nIngrese una opción: {Color.RESET}"
+    )
 
     if opcion == "1":
         criterio = "id"
@@ -77,7 +81,8 @@ def buscar_vendedor():
     elif opcion == "3":
         criterio = "dni"
     else:
-        print("Opción no válida.")
+        print(f"\n{Color.ROJO}Opción no válida.{Color.RESET}")
+        input(f"\nPresione {Color.AMARILLO}ENTER {Color.RESET}para continuar...")
         return
 
     valor = input(f"Ingrese el {criterio}: ")
@@ -87,17 +92,23 @@ def buscar_vendedor():
 
     for vendedor in lista_vendedores:
         if vendedor[criterio] == valor:
-            print(f"ID: {vendedor['id']}")
-            print(f"DNI: {vendedor['dni']}")
-            print(f"Nombre: {vendedor['nombre_completo']}")
-            print(f"Teléfono: {vendedor['telefono']}")
-            print(f"Email: {vendedor['email']}")
-            print(f"Comisión: {vendedor['comision_porcentaje']}%")
-            print(f"Fecha ingreso: {vendedor['fecha_ingreso']}")
-            print(f"Estado: {vendedor['estado']}")
+            print(f"""\n
+    ═══════════════════════════════════════════════════
+    VENDEDOR ENCONTRADO
+    ═══════════════════════════════════════════════════
+    {Color.CYAN}ID: {Color.RESET}{vendedor["id"]}
+    {Color.CYAN}DNI: {Color.RESET}{vendedor["dni"]}
+    {Color.CYAN}Nombre: {Color.RESET}{vendedor["nombre_completo"]}
+    {Color.CYAN}Teléfono: {Color.RESET}{vendedor["telefono"]}
+    {Color.CYAN}Email: {Color.RESET}{vendedor["email"]}
+    {Color.CYAN}Comisión: {Color.RESET}{vendedor["comision_porcentaje"]}%
+    {Color.CYAN}Fecha ingreso: {Color.RESET}{vendedor["fecha_ingreso"]}
+    {Color.CYAN}Estado: {Color.RESET}{vendedor["estado"]}
+            """)
+            input(f"\nPresione {Color.AMARILLO}ENTER {Color.RESET}para continuar...")
             return
 
-    print("Vendedor no encontrado.")
+    print(f"{Color.ROJO}Vendedor no encontrado.{Color.RESET}")
 
 
 def actualizar_vendedor():
@@ -133,10 +144,10 @@ def actualizar_vendedor():
                 vendedor["estado"] = nuevo_estado
 
             guardar_vendedores(lista_vendedores)
-            print("Vendedor actualizado correctamente.")
+            print(f"{Color.VERDE}Vendedor actualizado correctamente.{Color.RESET}")
             return
 
-    print("Vendedor no encontrado.")
+    print(f"{Color.ROJO}Vendedor no encontrado.{Color.RESET}")
 
 
 def eliminar_vendedor():
@@ -151,13 +162,19 @@ def eliminar_vendedor():
             if confirmacion.lower() == "s":
                 del lista_vendedores[i]
                 guardar_vendedores(lista_vendedores)
-                print("Vendedor eliminado correctamente.")
+                print(f"{Color.VERDE}Vendedor eliminado correctamente.{Color.RESET}")
+                input(
+                    f"\nPresione {Color.AMARILLO}ENTER {Color.RESET}para continuar..."
+                )
             else:
-                print("Eliminación cancelada.")
-
+                print(f"{Color.ROJO}Eliminación cancelada.{Color.RESET}")
+                input(
+                    f"\nPresione {Color.AMARILLO}ENTER {Color.RESET}para continuar..."
+                )
             return
 
-    print("Vendedor no encontrado.")
+    print(f"{Color.ROJO}Vendedor no encontrado.{Color.RESET}")
+    input(f"\nPresione {Color.AMARILLO}ENTER {Color.RESET}para continuar...")
 
 
 def menu_vendedores():
@@ -169,6 +186,7 @@ def menu_vendedores():
         id_vendedor = 1
 
     while True:
+        _limpiar_pantalla()
         print(f"""
     ═══════════════════════════════════════════════════
     👔 VENDEDORES
