@@ -17,6 +17,7 @@
 # • Estado del pago (cobrado, pendiente, en cuotas).
 
 from datetime import date
+from gettext import Catalog
 
 from modulo_autos import cambiar_estado_auto
 from utils.dbUtils import (
@@ -41,11 +42,11 @@ from utils.validateUtils import Color, _input_int, _input_str, _limpiar_pantalla
 
 # Función para seleccionar la forma de pago
 def _seleccionar_forma_pago():
-    print("""
+    print(f"""
     Forma de pago:
-        1. Contado
-        2. Financiado
-        3. Parte de pago (con otro auto)
+        {Color.AZUL}1. {Color.RESET}Contado
+        {Color.AZUL}2. {Color.RESET}Financiado
+        {Color.AZUL}3. {Color.RESET}Parte de pago (con otro auto)
             """)
 
     opcion = _input_int("Seleccione una opcion ")
@@ -64,11 +65,11 @@ def _seleccionar_forma_pago():
 
 # Función para seleccionar el estado del pago
 def _seleccionar_estado_pago():
-    print("""
+    print(f"""
     Estado del pago:
-        1. Cobrado
-        2. Pendiente
-        3. En cuotas
+        {Color.AZUL}1. {Color.RESET}Cobrado
+        {Color.AZUL}2. {Color.RESET}Pendiente
+        {Color.AZUL}3. {Color.RESET}En cuotas
             """)
 
     opcion = _input_int("Seleccione una opcion ")
@@ -94,19 +95,25 @@ def registrar_venta(id_auto=None, id_cliente=None, id_vendedor=None, precio_fina
     if id_auto is not None:
         # Validamos que los IDs recibidos por parámetro existan en la DB
         if _buscar_por_id("db/db_autos.json", id_auto) is None:
-            print(f"{Color.ROJO}No existe un auto con ID {id_auto}.")
+            print(
+                f"{Color.ROJO}No existe un auto con ID {Color.RESET}{id_auto}.{Color.RESET}"
+            )
             return None
         if (
             id_cliente is not None
             and _buscar_por_id("db/db_clientes.json", id_cliente) is None
         ):
-            print(f"{Color.ROJO}No existe un cliente con ID {id_cliente}.")
+            print(
+                f"{Color.ROJO}No existe un cliente con ID {Color.RESET}{id_cliente}.{Color.RESET}"
+            )
             return None
         if (
             id_vendedor is not None
             and _buscar_por_id("db/db_vendedores.json", id_vendedor) is None
         ):
-            print(f"{Color.ROJO}No existe un vendedor con ID {id_vendedor}.")
+            print(
+                f"{Color.ROJO}No existe un vendedor con ID {Color.RESET}{id_vendedor}.{Color.RESET}"
+            )
             return None
         id_ventas = _id_autoincremental("db/db_ventas.json")
         _limpiar_pantalla()
@@ -134,7 +141,7 @@ def registrar_venta(id_auto=None, id_cliente=None, id_vendedor=None, precio_fina
         _db_inyectar_datos("db/db_ventas.json", nueva_venta)
         cambiar_estado_auto(nueva_venta["id_auto"], "vendido")
         # _db_actualizar_dato("db/db_autos.json", id_auto, "estado", "vendido")
-        print(f"\n{Color.VERDE}Venta registrada correctamente.")
+        print(f"\n{Color.VERDE}Venta registrada correctamente.{Color.RESET}")
         input(f"\nPresione {Color.AMARILLO}ENTER {Color.RESET}para continuar...")
         return nueva_venta
 
@@ -183,7 +190,7 @@ def registrar_venta(id_auto=None, id_cliente=None, id_vendedor=None, precio_fina
                 _db_inyectar_datos("db/db_ventas.json", nueva_venta)
                 # Luego se cambia el estado del auto a "vendido"
                 cambiar_estado_auto(nueva_venta["id_auto"], "vendido")
-                print(f"\n{Color.VERDE}Venta registrada correctamente.")
+                print(f"\n{Color.VERDE}Venta registrada correctamente.{Color.RESET}")
                 venta_registrada = nueva_venta
                 input(
                     f"\nPresione {Color.AMARILLO}ENTER {Color.RESET}para continuar..."
@@ -192,7 +199,7 @@ def registrar_venta(id_auto=None, id_cliente=None, id_vendedor=None, precio_fina
             case 0:
                 pass
             case _:
-                print(f"\n{Color.ROJO}Opción no válida.")
+                print(f"\n{Color.ROJO}Opción no válida.{Color.RESET}")
                 input(
                     f"\nPresione {Color.AMARILLO}ENTER {Color.RESET}para continuar..."
                 )
@@ -220,7 +227,7 @@ def ventas():
                 lectura = _db_leer_datos("db/db_ventas.json")
 
                 if not lectura:
-                    print(f"\n{Color.ROJO}La lista de ventas esta vacia")
+                    print(f"\n{Color.ROJO}La lista de ventas esta vacia{Color.RESET}")
                     input(
                         f"\nPresione {Color.AMARILLO}ENTER {Color.RESET}para continuar..."
                     )
@@ -247,7 +254,7 @@ def ventas():
             case 0:
                 pass
             case _:
-                print(f"\n{Color.ROJO}Opción no válida.")
+                print(f"\n{Color.ROJO}Opción no válida.{Color.RESET}")
                 input(
                     f"\nPresione {Color.AMARILLO}ENTER {Color.RESET}para continuar..."
                 )
@@ -279,7 +286,7 @@ def buscar_venta():
 
                 # Si no hay autos registrados, se muestra un mensaje y se retorna
                 if not datos_autos:
-                    print(f"\n{Color.ROJO}No hay autos registrados.")
+                    print(f"\n{Color.ROJO}No hay autos registrados.{Color.RESET}")
                     input(
                         f"\nPresione {Color.AMARILLO}ENTER {Color.RESET}para continuar..."
                     )
@@ -299,7 +306,7 @@ def buscar_venta():
                         # Si no se encuentra la venta, mostramos un mensaje, sino mostramos los datos de la venta
                         if venta is None:
                             print(
-                                f"\n{Color.ROJO}No existe ninguna venta registrada para ese auto."
+                                f"\n{Color.ROJO}No existe ninguna venta registrada para ese auto.{Color.RESET}"
                             )
                         else:
                             print(f"""
@@ -317,7 +324,7 @@ def buscar_venta():
                 # Si no se encuentra el auto, mostramos un mensaje
                 if not encontrado:
                     print(
-                        f"\n{Color.ROJO}No se encontró ningún auto con la patente: {patente}"
+                        f"\n{Color.ROJO}No se encontró ningún auto con la patente: {Color.RESET}{patente}{Color.RESET}"
                     )
 
                 input(
@@ -332,7 +339,7 @@ def buscar_venta():
                 encontrado = False
 
                 if not datos_clientes:
-                    print(f"\n{Color.ROJO}No hay clientes registrados.")
+                    print(f"\n{Color.ROJO}No hay clientes registrados.{Color.RESET}")
                     input(
                         f"\nPresione {Color.AMARILLO}ENTER {Color.RESET}para continuar..."
                     )
@@ -349,12 +356,12 @@ def buscar_venta():
                         )
                         if venta is None:
                             print(
-                                f"\n{Color.ROJO}No existe ninguna venta registrada para este cliente."
+                                f"\n{Color.ROJO}No existe ninguna venta registrada para este cliente.{Color.RESET}"
                             )
                         else:
                             print(f"""
     ----------------------------------------
-    ID de venta:      {Color.RESET}  {venta["id"]}
+    {Catalog}ID de venta:      {Color.RESET}  {venta["id"]}
     {Color.CYAN}ID del auto:      {Color.RESET}  {venta["id_auto"]}
     {Color.CYAN}ID del cliente:   {Color.RESET}  {venta["id_cliente"]}
     {Color.CYAN}ID del vendedor:  {Color.RESET}  {venta["id_vendedor"]}
@@ -366,7 +373,7 @@ def buscar_venta():
                             """)
                 if not encontrado:
                     print(
-                        f"\n{Color.ROJO}No se encontró ningún cliente con el DNI: {dni}"
+                        f"\n{Color.ROJO}No se encontró ningún cliente con el DNI: {Color.RESET}{dni}{Color.RESET}"
                     )
 
                 input(
@@ -381,7 +388,7 @@ def buscar_venta():
                 encontrado = False
 
                 if not datos_vendedores:
-                    print(f"\n{Color.ROJO}No hay vendedores registrados.")
+                    print(f"\n{Color.ROJO}No hay vendedores registrados.{Color.RESET}")
                     input(
                         f"\nPresione {Color.AMARILLO}ENTER {Color.RESET}para continuar..."
                     )
@@ -398,7 +405,7 @@ def buscar_venta():
                         )
                         if venta is None:
                             print(
-                                f"\n{Color.ROJO}No existe ninguna venta registrada por este vendedor."
+                                f"\n{Color.ROJO}No existe ninguna venta registrada por este vendedor.{Color.RESET}"
                             )
                         else:
                             for venta_vendedor in venta:
@@ -417,7 +424,7 @@ def buscar_venta():
 
                 if not encontrado:
                     print(
-                        f"\n{Color.ROJO}No se encontró ningún vendedor con el DNI: {dni}"
+                        f"\n{Color.ROJO}No se encontró ningún vendedor con el DNI: {Color.RESET}{dni}{Color.RESET}"
                     )
                 input(
                     f"\nPresione {Color.AMARILLO}ENTER {Color.RESET}para continuar..."
@@ -426,7 +433,7 @@ def buscar_venta():
             case 0:
                 pass
             case _:
-                print(f"\n{Color.ROJO}Opción no válida.")
+                print(f"\n{Color.ROJO}Opción no válida.{Color.RESET}")
                 input(
                     f"\nPresione {Color.AMARILLO}ENTER {Color.RESET}para continuar..."
                 )
@@ -453,7 +460,9 @@ def cambiar_estado_de_venta():
                 venta = _buscar_por_id("db/db_ventas.json", id_venta)
 
                 if not venta:
-                    print(f"\n{Color.ROJO}No se encontró una venta con ese ID.")
+                    print(
+                        f"\n{Color.ROJO}No se encontró una venta con ese ID.{Color.RESET}"
+                    )
                     input(
                         f"\nPresione {Color.AMARILLO}ENTER {Color.RESET}para continuar..."
                     )
@@ -524,21 +533,21 @@ def eliminar_venta():
                 # Verificamos que exista la venta
                 # Si no existe, mostramos un mensaje de error y volvemos al menú
                 if not _buscar_por_id("db/db_ventas.json", id_venta):
-                    print(f"\n{Color.ROJO}La venta no existe.")
+                    print(f"\n{Color.ROJO}La venta no existe.{Color.RESET}")
                     input(
                         f"\nPresione {Color.AMARILLO}ENTER {Color.RESET}para continuar..."
                     )
                     pass
                 else:
                     _db_eliminar_valor("db/db_ventas.json", id_venta)
-                    print(f"\n{Color.VERDE}Venta eliminada correctamente.")
+                    print(f"\n{Color.VERDE}Venta eliminada correctamente.{Color.RESET}")
                     input(
                         f"\nPresione {Color.AMARILLO}ENTER {Color.RESET}para continuar..."
                     )
             case 0:
                 pass
             case _:
-                print(f"\n{Color.ROJO}Opción inválida.")
+                print(f"\n{Color.ROJO}Opción inválida.{Color.RESET}")
                 input(
                     f"\nPresione {Color.AMARILLO}ENTER {Color.RESET}para continuar..."
                 )
@@ -577,7 +586,7 @@ def menu_ventas():
             case 0:
                 pass
             case _:
-                print(f"{Color.ROJO}Opción inválida, vuelva a intentarlo.\n")
+                print(f"{Color.ROJO}Opción inválida, vuelva a intentarlo.{Color.RESET}")
                 input(
                     f"\nPresione {Color.AMARILLO}ENTER {Color.RESET}para continuar..."
                 )

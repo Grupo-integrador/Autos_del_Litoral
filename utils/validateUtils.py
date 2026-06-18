@@ -9,7 +9,7 @@ def _input_int(mensaje):
             return int(input(mensaje))
         except ValueError:  # Atrapa la excepción ValueError
             # Avisa del error y vuelve a repetir el bucle
-            print(" ⚠️  Ingrese un número válido.")
+            print(f" ⚠️  {Color.ROJO}Ingrese un número válido.{Color.RESET}")
 
 
 # Funcion para validar entrada de tipo str
@@ -23,7 +23,7 @@ def _input_str(mensaje):
                 )  # El raise lanza la excepción
             return value
         except ValueError as e:  # Atrapa la excepción ValueError
-            print(f" ⚠️  {e}")
+            print(f" ⚠️  {Color.ROJO}{e}{Color.RESET}")
 
 
 # Funcion para limpiar la consola
