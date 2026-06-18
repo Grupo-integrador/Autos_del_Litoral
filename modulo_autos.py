@@ -1,10 +1,10 @@
 # date, fecha de ingreso al stock, al importar date se crea con fecha real
 import json
 from datetime import date
-from string import printable
 
 from utils.dbUtils import (
     _db_actualizar_dato,
+    _db_eliminar_valor,
 )
 from utils.idUtils import _buscar_por_id
 from utils.validateUtils import Color, _input_int, _limpiar_pantalla
@@ -204,9 +204,10 @@ def dar_de_baja_auto():
         return
     confirmacion = input("Seguro? (S/N): ").upper()
     if confirmacion == "S":
-        lista_autos.remove(auto)
-        guardar_autos(lista_autos)
+        _db_eliminar_valor("db/db_autos.json", auto["id"])
+
         print(f"{Color.VERDE}Eliminado.{Color.RESET}")
+        input(f"Presione {Color.AMARILLO}ENTER{Color.RESET} para continuar...")
 
 
 def menu_autos():

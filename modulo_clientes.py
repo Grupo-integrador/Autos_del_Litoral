@@ -20,7 +20,10 @@
 # 👤 Módulo de Clientes - Concesionaria
 import json
 
+from utils.validateUtils import Color, _limpiar_pantalla
+
 RUTA_DB_CLIENTES = "db/db_clientes.json"
+
 
 def cargar_clientes():
     try:
@@ -29,9 +32,11 @@ def cargar_clientes():
     except (FileNotFoundError, json.JSONDecodeError):
         return []
 
+
 def guardar_clientes(lista):
     with open(RUTA_DB_CLIENTES, "w", encoding="utf-8") as archivo:
         json.dump(lista, archivo, indent=4)
+
 
 listas_Clientes = []
 id_Cliente = 1
@@ -58,23 +63,25 @@ def registrar_Cliente():
     id_Cliente += 1
     listas_Clientes.append(nuevo_Cliente)
     guardar_clientes(listas_Clientes)
-    print("Cliente registrado exitosamente.")
+    print(f"{Color.VERDE}Cliente registrado exitosamente.{Color.RESET}")
+    input(f"Presione {Color.AMARILLO}ENTER{Color.RESET} para continuar...")
 
 
 def listar_Clientes():
     if len(listas_Clientes) == 0:
-        print("No hay clientes registrados")
+        print(f"{Color.ROJO}No hay clientes registrados{Color.RESET}")
         return
 
     for cliente in listas_Clientes:
-        print(f"ID: {cliente['id']}")
-        print(f"DNI: {cliente['dni']}")
-        print(f"Nombre completo: {cliente['nombre_completo']}")
-        print(f"Teléfono: {cliente['telefono']}")
-        print(f"Email: {cliente['email']}")
-        print(f"Localidad: {cliente['localidad']}")
-        print(f"Qué busca: {cliente['que_busca']}")
+        print(f"{Color.CYAN}ID: {Color.RESET}{cliente['id']}")
+        print(f"{Color.CYAN}DNI: {Color.RESET}{cliente['dni']}")
+        print(f"{Color.CYAN}Nombre completo: {Color.RESET}{cliente['nombre_completo']}")
+        print(f"{Color.CYAN}Teléfono: {Color.RESET}{cliente['telefono']}")
+        print(f"{Color.CYAN}Email: {Color.RESET}{cliente['email']}")
+        print(f"{Color.CYAN}Localidad: {Color.RESET}{cliente['localidad']}")
+        print(f"{Color.CYAN}Qué busca: {Color.RESET}{cliente['que_busca']}")
         print("-" * 20)
+    input(f"Presione {Color.AMARILLO}ENTER{Color.RESET} para continuar...")
 
 
 def buscar_Cliente():
@@ -86,7 +93,7 @@ def buscar_Cliente():
     elif opcion == "3":
         criterio_busqueda = "dni"
     else:
-        print("Opción no válida.")
+        print(f"{Color.ROJO}Opción no válida.{Color.RESET}")
         return
 
     valor_busqueda = input(f"Ingrese el {criterio_busqueda}: ")
@@ -95,16 +102,19 @@ def buscar_Cliente():
 
     for cliente in listas_Clientes:
         if cliente[criterio_busqueda] == valor_busqueda:
-            print(f"ID: {cliente['id']}")
-            print(f"DNI: {cliente['dni']}")
-            print(f"Nombre completo: {cliente['nombre_completo']}")
-            print(f"Teléfono: {cliente['telefono']}")
-            print(f"Email: {cliente['email']}")
-            print(f"Localidad: {cliente['localidad']}")
-            print(f"Qué busca: {cliente['que_busca']}")
+            print(f"\n{Color.CYAN}ID: {Color.RESET}{cliente['id']}")
+            print(f"{Color.CYAN}DNI: {Color.RESET}{cliente['dni']}")
+            print(
+                f"{Color.CYAN}Nombre completo: {Color.RESET}{cliente['nombre_completo']}"
+            )
+            print(f"{Color.CYAN}Teléfono: {Color.RESET}{cliente['telefono']}")
+            print(f"{Color.CYAN}Email: {Color.RESET}{cliente['email']}")
+            print(f"{Color.CYAN}Localidad: {Color.RESET}{cliente['localidad']}")
+            print(f"{Color.CYAN}Qué busca: {Color.RESET}{cliente['que_busca']}")
             print("-" * 20)
+            input(f"Presione {Color.AMARILLO}ENTER{Color.RESET} para continuar...")
             return
-    print("Cliente no encontrado.")
+    print(f"{Color.ROJO}Cliente no encontrado.{Color.RESET}")
 
 
 def actualizar_Cliente():
@@ -138,8 +148,10 @@ def actualizar_Cliente():
 
             guardar_clientes(listas_Clientes)
             print("Cliente actualizado exitosamente.")
+            input(f"Presione {Color.AMARILLO}ENTER{Color.RESET} para continuar...")
             return
-    print("Cliente no encontrado.")
+    print(f"{Color.ROJO}Cliente no encontrado.{Color.RESET}")
+    input(f"Presione {Color.AMARILLO}ENTER{Color.RESET} para continuar...")
 
 
 def eliminar_Cliente():
@@ -152,11 +164,13 @@ def eliminar_Cliente():
             if confirmacion.lower() == "s":
                 del listas_Clientes[i]
                 guardar_clientes(listas_Clientes)
-                print("Cliente eliminado exitosamente.")
+                print(f"{Color.VERDE}Cliente eliminado exitosamente.{Color.RESET}")
+                input(f"Presione {Color.AMARILLO}ENTER{Color.RESET} para continuar...")
             else:
-                print("Eliminación cancelada.")
+                print(f"{Color.ROJO}Eliminación cancelada.{Color.RESET}")
+                input(f"Presione {Color.AMARILLO}ENTER{Color.RESET} para continuar...")
             return
-    print("Cliente no encontrado.")
+    print(f"{Color.ROJO}Cliente no encontrado.{Color.RESET}")
 
 
 # ✅ El menú ahora está dentro de una función, no se ejecuta solo al importar
@@ -169,13 +183,18 @@ def menu_clientes():
         id_Cliente = 1
 
     while True:
-        print("\n--- Menú de Clientes ---")
-        print("1. Registrar cliente")
-        print("2. Listar clientes")
-        print("3. Buscar cliente")
-        print("4. Actualizar cliente")
-        print("5. Eliminar cliente")
-        print("0. Volver al menú principal")
+        _limpiar_pantalla()
+        print(f"""
+    ═══════════════════════════════════════════════════
+    👤 CLIENTES
+    ═══════════════════════════════════════════════════
+    {Color.CYAN}1. {Color.RESET}Registrar cliente
+    {Color.CYAN}2. {Color.RESET}Listar clientes
+    {Color.CYAN}3. {Color.RESET}Buscar cliente
+    {Color.CYAN}4. {Color.RESET}Actualizar cliente
+    {Color.CYAN}5. {Color.RESET}Eliminar cliente
+    {Color.CYAN}0. {Color.RESET}Volver al menú principal
+    """)
 
         opcion = input("Seleccione una opción: ")
 

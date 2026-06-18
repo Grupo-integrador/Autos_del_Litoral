@@ -1,92 +1,92 @@
 [
-  {
-    "id": 1,
-    "dni": "30123456",
-    "nombre_completo": "María González",
-    "telefono": "345-4123456",
-    "email": "maria.gonzalez@gmail.com",
-    "localidad": "Federación",
-    "que_busca": "auto familiar hasta 15 millones"
-  },
-  {
-    "id": 2,
-    "dni": "28765432",
-    "nombre_completo": "Juan Pérez",
-    "telefono": "345-4234567",
-    "email": "juanperez@hotmail.com",
-    "localidad": "Concordia",
-    "que_busca": "camioneta 4x4"
-  },
-  {
-    "id": 3,
-    "dni": "33456789",
-    "nombre_completo": "Lucía Fernández",
-    "telefono": "345-4345678",
-    "email": "luciaf@gmail.com",
-    "localidad": "Chajarí",
-    "que_busca": "primer auto económico"
-  },
-  {
-    "id": 4,
-    "dni": "29876543",
-    "nombre_completo": "Carlos Medina",
-    "telefono": "345-4456789",
-    "email": "cmedina@yahoo.com",
-    "localidad": "Junín",
-    "que_busca": "sedán usado"
-  },
-  {
-    "id": 5,
-    "dni": "31567890",
-    "nombre_completo": "Sofía Torres",
-    "telefono": "345-4567890",
-    "email": "sofia.t@gmail.com",
-    "localidad": "Pergamino",
-    "que_busca": "auto automático"
-  },
-  {
-    "id": 6,
-    "dni": "27654321",
-    "nombre_completo": "Diego Rojas",
-    "telefono": "345-4678901",
-    "email": "drojas@gmail.com",
-    "localidad": "Salto",
-    "que_busca": "utilitario"
-  },
-  {
-    "id": 7,
-    "dni": "32456781",
-    "nombre_completo": "Valentina Ruiz",
-    "telefono": "345-4789012",
-    "email": "valeruiz@gmail.com",
-    "localidad": "Rojas",
-    "que_busca": "SUV para familia"
-  },
-  {
-    "id": 8,
-    "dni": "29123487",
-    "nombre_completo": "Matías Gómez",
-    "telefono": "345-4890123",
-    "email": "matiasg@hotmail.com",
-    "localidad": "Colón",
-    "que_busca": "auto hasta 10 millones"
-  },
-  {
-    "id": 9,
-    "dni": "31234567",
-    "nombre_completo": "Carolina Silva",
-    "telefono": "345-4901234",
-    "email": "carolinas@gmail.com",
-    "localidad": "Gualeguaychú",
-    "que_busca": "hatchback moderno"
-  },
-  {
-    "id": 10,
-    "dni": "28543219",
-    "nombre_completo": "Federico López",
-    "telefono": "345-4012345",
-    "email": "federico.lopez@gmail.com",
-    "localidad": "San Nicolás",
-    "que_busca": "camioneta usada"
-  }
+    {
+        "id": 1,
+        "dni": "30123456",
+        "nombre_completo": "Mar\u00eda Gonz\u00e1lez",
+        "telefono": "345-4123456",
+        "email": "maria.gonzalez@gmail.com",
+        "localidad": "Federaci\u00f3n",
+        "que_busca": "auto familiar hasta 15 millones"
+    },
+    {
+        "id": 2,
+        "dni": "28765432",
+        "nombre_completo": "Juan P\u00e9rez",
+        "telefono": "345-4234567",
+        "email": "juanperez@hotmail.com",
+        "localidad": "Concordia",
+        "que_busca": "camioneta 4x4"
+    },
+    {
+        "id": 3,
+        "dni": "33456789",
+        "nombre_completo": "Luc\u00eda Fern\u00e1ndez",
+        "telefono": "345-4345678",
+        "email": "luciaf@gmail.com",
+        "localidad": "Chajar\u00ed",
+        "que_busca": "primer auto econ\u00f3mico"
+    },
+    {
+        "id": 4,
+        "dni": "29876543",
+        "nombre_completo": "Carlos Medina",
+        "telefono": "345-4456789",
+        "email": "cmedina@yahoo.com",
+        "localidad": "Jun\u00edn",
+        "que_busca": "sed\u00e1n usado"
+    },
+    {
+        "id": 5,
+        "dni": "31567890",
+        "nombre_completo": "Sof\u00eda Torres",
+        "telefono": "345-4567890",
+        "email": "sofia.t@gmail.com",
+        "localidad": "Pergamino",
+        "que_busca": "auto autom\u00e1tico"
+    },
+    {
+        "id": 6,
+        "dni": "27654321",
+        "nombre_completo": "Diego Rojas",
+        "telefono": "345-4678901",
+        "email": "drojas@gmail.com",
+        "localidad": "Salto",
+        "que_busca": "utilitario"
+    },
+    {
+        "id": 7,
+        "dni": "32456781",
+        "nombre_completo": "Valentina Ruiz",
+        "telefono": "345-4789012",
+        "email": "valeruiz@gmail.com",
+        "localidad": "Rojas",
+        "que_busca": "SUV para familia"
+    },
+    {
+        "id": 8,
+        "dni": "29123487",
+        "nombre_completo": "Mat\u00edas G\u00f3mez",
+        "telefono": "345-4890123",
+        "email": "matiasg@hotmail.com",
+        "localidad": "Col\u00f3n",
+        "que_busca": "auto hasta 10 millones"
+    },
+    {
+        "id": 9,
+        "dni": "31234567",
+        "nombre_completo": "Carolina Silva",
+        "telefono": "345-4901234",
+        "email": "carolinas@gmail.com",
+        "localidad": "Gualeguaych\u00fa",
+        "que_busca": "hatchback moderno"
+    },
+    {
+        "id": 10,
+        "dni": "28543219",
+        "nombre_completo": "Federico L\u00f3pez",
+        "telefono": "345-4012345",
+        "email": "federico.lopez@gmail.com",
+        "localidad": "San Nicol\u00e1s",
+        "que_busca": "camioneta usada"
+    }
 ]
