@@ -1,6 +1,9 @@
 import json
 
+from utils.validateUtils import Color
+
 RUTA_DB_VENDEDORES = "db/db_vendedores.json"
+
 
 def cargar_vendedores():
     try:
@@ -9,9 +12,11 @@ def cargar_vendedores():
     except (FileNotFoundError, json.JSONDecodeError):
         return []
 
+
 def guardar_vendedores(lista):
     with open(RUTA_DB_VENDEDORES, "w", encoding="utf-8") as archivo:
         json.dump(lista, archivo, indent=4)
+
 
 lista_vendedores = []
 id_vendedor = 1
@@ -117,7 +122,11 @@ def actualizar_vendedor():
             if nuevo_email:
                 vendedor["email"] = nuevo_email
             if nueva_comision:
-                vendedor["comision_porcentaje"] = float(nueva_comision) if nueva_comision else vendedor["comision_porcentaje"]
+                vendedor["comision_porcentaje"] = (
+                    float(nueva_comision)
+                    if nueva_comision
+                    else vendedor["comision_porcentaje"]
+                )
             if nueva_fecha:
                 vendedor["fecha_ingreso"] = nueva_fecha
             if nuevo_estado:
@@ -160,13 +169,17 @@ def menu_vendedores():
         id_vendedor = 1
 
     while True:
-        print("\n--- Menú de Vendedores ---")
-        print("1. Registrar vendedor")
-        print("2. Listar vendedores")
-        print("3. Buscar vendedor")
-        print("4. Actualizar vendedor")
-        print("5. Eliminar vendedor")
-        print("0. Volver al menú principal")
+        print(f"""
+    ═══════════════════════════════════════════════════
+    👔 VENDEDORES
+    ═══════════════════════════════════════════════════
+    {Color.AZUL}1.{Color.RESET} Registrar vendedor.
+    {Color.AZUL}2.{Color.RESET} Listar vendedores.
+    {Color.AZUL}3.{Color.RESET} Buscar vendedor.
+    {Color.AZUL}4.{Color.RESET} Actualizar vendedor.
+    {Color.AZUL}5.{Color.RESET} Eliminar vendedor.
+    {Color.ROJO}0.{Color.RESET} Volver al menú principal.
+            """)
 
         opcion = input("Seleccione una opción: ")
 
