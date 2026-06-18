@@ -7,6 +7,16 @@
         "fecha_reserva": "2026-06-11",
         "monto_sena": 5000,
         "fecha_limite": "2026-07-11",
-        "estado": "activa"
+        "estado": "cancelada"
+    },
+    {
+        "id": 2,
+        "id_auto": 5,
+        "id_cliente": 4,
+        "id_vendedor": 3,
+        "fecha_reserva": "2026-06-18",
+        "monto_sena": 67400000,
+        "fecha_limite": "2026-07-18",
+        "estado": "concretada"
     }
 ]
