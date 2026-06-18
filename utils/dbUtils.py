@@ -56,6 +56,21 @@ def _db_actualizar_dato(archivo, id, campo, valor):
         )  # Guardamos el contenido actualizado sobreescribiendo "contenido"
 
 
+# Funcion para actualizar un registro en un archivo JSON
+def _db_actualizar_un_registro(archivo, id_del_registro, registro_actualizado):
+    contenido = _db_leer_datos(archivo)
+
+    for item in contenido:
+        if item["id"] == id_del_registro:
+            item.update(registro_actualizado)  # Actualizamos el valor del campo
+            break
+
+    with open(archivo, "w", encoding="utf-8") as f:
+        f.write(
+            json.dumps(contenido, indent=4)
+        )  # Guardamos el contenido actualizado sobreescribiendo "contenido"
+
+
 # TODO: MEJORAR
 # Funcion para eliminar un valor en un archivo JSON, EJ: _db_eliminar_dato("db_ventas.json", id_venta)
 def _db_eliminar_valor(archivo, id):

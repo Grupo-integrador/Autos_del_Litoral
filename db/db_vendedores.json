@@ -2,7 +2,7 @@
     {
         "id": 1,
         "dni": "25456789",
-        "nombre_completo": "Carlos Ríos",
+        "nombre_completo": "Carlos R\u00edos",
         "telefono": "345-4987654",
         "email": "carlos@autosdellitoral.com",
         "comision_porcentaje": 3.0,
@@ -22,7 +22,7 @@
     {
         "id": 3,
         "dni": "26345678",
-        "nombre_completo": "Martín Fernández",
+        "nombre_completo": "Mart\u00edn Fern\u00e1ndez",
         "telefono": "345-4765432",
         "email": "martin@autosdellitoral.com",
         "comision_porcentaje": 4.0,
@@ -32,7 +32,7 @@
     {
         "id": 4,
         "dni": "28901234",
-        "nombre_completo": "Paula Gómez",
+        "nombre_completo": "Paula G\u00f3mez",
         "telefono": "345-4654321",
         "email": "paula@autosdellitoral.com",
         "comision_porcentaje": 3.0,
@@ -42,7 +42,7 @@
     {
         "id": 5,
         "dni": "27123456",
-        "nombre_completo": "Ricardo Díaz",
+        "nombre_completo": "Ricardo D\u00edaz",
         "telefono": "345-4543210",
         "email": "ricardo@autosdellitoral.com",
         "comision_porcentaje": 2.5,
@@ -62,7 +62,7 @@
     {
         "id": 7,
         "dni": "28234567",
-        "nombre_completo": "Javier Sánchez",
+        "nombre_completo": "Javier S\u00e1nchez",
         "telefono": "345-4321098",
         "email": "javier@autosdellitoral.com",
         "comision_porcentaje": 3.0,
@@ -82,7 +82,7 @@
     {
         "id": 9,
         "dni": "27345678",
-        "nombre_completo": "Sebastián Vega",
+        "nombre_completo": "Sebasti\u00e1n Vega",
         "telefono": "345-4109876",
         "email": "sebastian@autosdellitoral.com",
         "comision_porcentaje": 3.0,
