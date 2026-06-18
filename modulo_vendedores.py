@@ -3,9 +3,10 @@ from utils.idUtils import _id_autoincremental
 
 lista_vendedores = []
 
+
 def registrar_vendedor():
-   id_vendedor = _id_autoincremental("db/db_vendedores.json")
-    
+    id_vendedor = _id_autoincremental("db/db_vendedores.json")
+
     dni = input("Ingrese DNI: ")
     nombre = input("Ingrese nombre completo: ")
     telefono = input("Ingrese teléfono: ")
@@ -13,7 +14,7 @@ def registrar_vendedor():
     comision = input("Ingrese porcentaje de comisión: ")
     fecha_ingress = input("Ingrese fecha de ingreso: ")
     estado = input("Ingrese estado (activo/inactivo): ")
-    
+
     vendedor = {
         "id": id_vendedor,
         "dni": dni,
@@ -22,12 +23,13 @@ def registrar_vendedor():
         "email": email,
         "comision": comision,
         "fecha_ingreso": fecha_ingress,
-        "estado": estado
+        "estado": estado,
     }
-    
-   _db_inyectar_datos("db/db_vendedores.json", vendedor)
+
+    _db_inyectar_datos("db/db_vendedores.json", vendedor)
     print("Vendedor registrado exitosamente.")
-    
+
+
 def listar_vendedores():
     vendedores = _db_leer_datos("db/db_vendedores.json")
 
@@ -45,6 +47,7 @@ def listar_vendedores():
         print(f"Fecha ingreso: {vendedor['fecha_ingreso']}")
         print(f"Estado: {vendedor['estado']}")
         print("-" * 20)
+
 
 def buscar_vendedor():
     vendedores = _db_leer_datos("db/db_vendedores.json")
@@ -80,6 +83,7 @@ def buscar_vendedor():
 
     print("Vendedor no encontrado.")
 
+
 def actualizar_vendedor():
     vendedores = _db_leer_datos("db/db_vendedores.json")
 
@@ -87,7 +91,6 @@ def actualizar_vendedor():
 
     for vendedor in vendedores:
         if vendedor["id"] == id_busqueda:
-
             nuevo_dni = input(f"DNI ({vendedor['dni']}): ")
             nuevo_nombre = input(f"Nombre ({vendedor['nombre']}): ")
             nuevo_telefono = input(f"Teléfono ({vendedor['telefono']}): ")
@@ -117,6 +120,7 @@ def actualizar_vendedor():
 
     print("Vendedor no encontrado.")
 
+
 def eliminar_vendedor():
     vendedores = _db_leer_datos("db/db_vendedores.json")
 
@@ -124,7 +128,6 @@ def eliminar_vendedor():
 
     for i, vendedor in enumerate(vendedores):
         if vendedor["id"] == id_busqueda:
-
             confirmacion = input(
                 f"¿Desea eliminar al vendedor {vendedor['nombre']}? (s/n): "
             )
@@ -140,9 +143,9 @@ def eliminar_vendedor():
 
     print("Vendedor no encontrado.")
 
+
 def menu_vendedores():
     while True:
-
         print("\n--- Menú de Vendedores ---")
         print("1. Registrar vendedor")
         print("2. Listar vendedores")
@@ -167,6 +170,7 @@ def menu_vendedores():
             break
         else:
             print("Opción no válida.")
+
 
 if __name__ == "__main__":
     menu_vendedores()
