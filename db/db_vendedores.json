@@ -1,1 +1,102 @@
-[]
+[
+    {
+        "id": 1,
+        "dni": "25456789",
+        "nombre_completo": "Carlos Ríos",
+        "telefono": "345-4987654",
+        "email": "carlos@autosdellitoral.com",
+        "comision_porcentaje": 3.0,
+        "fecha_ingreso": "2020-06-01",
+        "estado": "activo"
+    },
+    {
+        "id": 2,
+        "dni": "27890123",
+        "nombre_completo": "Laura Acosta",
+        "telefono": "345-4876543",
+        "email": "laura@autosdellitoral.com",
+        "comision_porcentaje": 3.5,
+        "fecha_ingreso": "2021-03-15",
+        "estado": "activo"
+    },
+    {
+        "id": 3,
+        "dni": "26345678",
+        "nombre_completo": "Martín Fernández",
+        "telefono": "345-4765432",
+        "email": "martin@autosdellitoral.com",
+        "comision_porcentaje": 4.0,
+        "fecha_ingreso": "2019-11-10",
+        "estado": "activo"
+    },
+    {
+        "id": 4,
+        "dni": "28901234",
+        "nombre_completo": "Paula Gómez",
+        "telefono": "345-4654321",
+        "email": "paula@autosdellitoral.com",
+        "comision_porcentaje": 3.0,
+        "fecha_ingreso": "2022-01-20",
+        "estado": "activo"
+    },
+    {
+        "id": 5,
+        "dni": "27123456",
+        "nombre_completo": "Ricardo Díaz",
+        "telefono": "345-4543210",
+        "email": "ricardo@autosdellitoral.com",
+        "comision_porcentaje": 2.5,
+        "fecha_ingreso": "2018-08-05",
+        "estado": "inactivo"
+    },
+    {
+        "id": 6,
+        "dni": "29567890",
+        "nombre_completo": "Natalia Romero",
+        "telefono": "345-4432109",
+        "email": "natalia@autosdellitoral.com",
+        "comision_porcentaje": 3.5,
+        "fecha_ingreso": "2023-04-12",
+        "estado": "activo"
+    },
+    {
+        "id": 7,
+        "dni": "28234567",
+        "nombre_completo": "Javier Sánchez",
+        "telefono": "345-4321098",
+        "email": "javier@autosdellitoral.com",
+        "comision_porcentaje": 3.0,
+        "fecha_ingreso": "2024-02-18",
+        "estado": "activo"
+    },
+    {
+        "id": 8,
+        "dni": "26789012",
+        "nombre_completo": "Gabriela Molina",
+        "telefono": "345-4210987",
+        "email": "gabriela@autosdellitoral.com",
+        "comision_porcentaje": 4.5,
+        "fecha_ingreso": "2017-09-01",
+        "estado": "activo"
+    },
+    {
+        "id": 9,
+        "dni": "27345678",
+        "nombre_completo": "Sebastián Vega",
+        "telefono": "345-4109876",
+        "email": "sebastian@autosdellitoral.com",
+        "comision_porcentaje": 3.0,
+        "fecha_ingreso": "2025-01-07",
+        "estado": "activo"
+    },
+    {
+        "id": 10,
+        "dni": "28678901",
+        "nombre_completo": "Florencia Castro",
+        "telefono": "345-4098765",
+        "email": "florencia@autosdellitoral.com",
+        "comision_porcentaje": 3.8,
+        "fecha_ingreso": "2022-10-03",
+        "estado": "activo"
+    }
+]
